@@ -1,0 +1,51 @@
+// REGRAS SEGURAS (RECOMENDADO)
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function para verificar se o documento pertence ao usuário
+    function isOwner() {
+      return request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    function isCreatingOwner() {
+      return request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Regras para coleções
+    match /collections/{collectionId} {
+      allow read: if request.auth != null && isOwner();
+      allow update, delete: if request.auth != null && isOwner();
+      allow create: if isCreatingOwner();
+    }
+    
+    // Regras para grupos (dentro de coleções)
+    match /groups/{groupId} {
+      allow read: if request.auth != null && isOwner();
+      allow update, delete: if request.auth != null && isOwner();
+      allow create: if isCreatingOwner();
+    }
+    
+    // Regras para mangás (dentro de grupos)
+    match /mangaCollection/{mangaId} {
+      allow read: if request.auth != null && isOwner();
+      allow update, delete: if request.auth != null && isOwner();
+      allow create: if isCreatingOwner();
+    }
+  }
+}
+
+// ============================================
+// REGRAS TEMPORÁRIAS PARA TESTE (MENOS SEGURAS)
+// Use apenas se as regras acima não funcionarem
+// ============================================
+/*
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+*/
+
