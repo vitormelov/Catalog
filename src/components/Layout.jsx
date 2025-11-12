@@ -16,34 +16,29 @@ const Layout = ({ children }) => {
     }
   };
 
+  const isLandingPage = !currentUser;
+
   return (
-    <div className="layout">
-      <header className="header">
-        <div className="header-content">
-          <Link to="/" className="logo">
-            📚 Minha Coleção de Mangás
-          </Link>
-          <nav className="nav">
-            {currentUser ? (
-              <>
-                <Link to="/">Início</Link>
-                <Link to="/collections">Coleções</Link>
-                <Link to="/search">Buscar Mangás</Link>
-                <span className="user-email">{currentUser.email}</span>
-                <button onClick={handleLogout} className="logout-btn">
-                  Sair
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login">Entrar</Link>
-                <Link to="/signup">Cadastrar</Link>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
-      <main className="main-content">
+    <div className={`layout ${isLandingPage ? 'no-header-layout' : ''}`}>
+      {currentUser && (
+        <header className="header">
+          <div className="header-content">
+            <Link to="/" className="logo">
+              Catalog
+            </Link>
+            <nav className="nav">
+              <Link to="/">Início</Link>
+              <Link to="/collections">Coleções</Link>
+              <Link to="/search">Buscar Mangás</Link>
+              <span className="user-email">{currentUser.email}</span>
+              <button onClick={handleLogout} className="logout-btn">
+                Sair
+              </button>
+            </nav>
+          </div>
+        </header>
+      )}
+      <main className={`main-content ${isLandingPage ? 'no-header' : ''}`}>
         {children}
       </main>
     </div>

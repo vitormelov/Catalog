@@ -2,6 +2,14 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.layout.no-header-layout {
+  width: 100%;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .header {
@@ -21,10 +29,16 @@
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.8rem;
+  font-weight: 800;
   text-decoration: none;
   color: white;
+  letter-spacing: -0.5px;
+  transition: opacity 0.2s;
+}
+
+.logo:hover {
+  opacity: 0.9;
 }
 
 .nav {
@@ -71,6 +85,16 @@
   width: 100%;
   margin: 0 auto;
   padding: 2rem;
+}
+
+.main-content.no-header {
+  padding: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
 }
 
 @media (max-width: 768px) {

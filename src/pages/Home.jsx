@@ -1,18 +1,19 @@
 // Página inicial
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { getUserCollections, getUserMangaCollection } from '../services/firestoreService';
-import { getCollectionTotalCost } from '../services/firestoreService';
+import { getUserCollections, getUserMangaCollection, getMangaByCollection, getCollectionTotalCost } from '../services/firestoreService';
 import './Home.css';
 
 const Home = () => {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     collections: 0,
     mangas: 0,
     totalCost: 0
   });
+  const [collectionsData, setCollectionsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,18 +29,56 @@ const Home = () => {
         getUserMangaCollection(currentUser.uid)
       ]);
 
-      // Calcular custos totais
-      const collectionCosts = await Promise.all(
-        collections.map(col => getCollectionTotalCost(col.id))
+      // Calcular dados detalhados de cada coleção
+      const collectionsWithData = await Promise.all(
+        collections.map(async (col) => {
+          const mangasInCollection = await getMangaByCollection(col.id);
+          const totalCost = await getCollectionTotalCost(col.id);
+          
+          // Calcular volumes possuídos e totais
+          let ownedVolumes = 0;
+          let totalVolumes = 0;
+          const ratings = [];
+          
+          mangasInCollection.forEach((manga) => {
+            const volumes = manga.volumes || [];
+            ownedVolumes += volumes.length;
+            
+            if (manga.totalVolumes !== null && manga.totalVolumes !== undefined) {
+              totalVolumes += manga.totalVolumes;
+            }
+            
+            if (manga.rating !== null && manga.rating !== undefined) {
+              ratings.push(manga.rating);
+            }
+          });
+          
+          // Calcular nota média
+          const averageRating = ratings.length > 0
+            ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+            : null;
+          
+          return {
+            ...col,
+            ownedVolumes,
+            totalVolumes: totalVolumes > 0 ? totalVolumes : null,
+            averageRating,
+            totalCost,
+            mangaCount: mangasInCollection.length
+          };
+        })
       );
 
-      const totalCost = collectionCosts.reduce((sum, cost) => sum + cost, 0);
+      // Calcular custos totais
+      const totalCost = collectionsWithData.reduce((sum, col) => sum + col.totalCost, 0);
 
       setStats({
         collections: collections.length,
         mangas: mangas.length,
         totalCost
       });
+      
+      setCollectionsData(collectionsWithData);
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error);
     } finally {
@@ -47,12 +86,32 @@ const Home = () => {
     }
   };
 
+  const formatRating = (rating) => {
+    if (rating === null || rating === undefined) {
+      return 'Sem nota';
+    }
+    const roundedRating = Math.round(rating * 2) / 2;
+    return Number.isInteger(roundedRating)
+      ? roundedRating.toFixed(0)
+      : roundedRating.toFixed(1);
+  };
+
   if (!currentUser) {
     return (
-      <div className="home-container">
+      <div className="home-container home-landing">
+        <video
+          className="background-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src="/videos/background1.mp4" type="video/mp4" />
+        </video>
+        <div className="video-overlay"></div>
         <div className="welcome-section">
-          <h1>Bem-vindo à sua Coleção de Mangás!</h1>
-          <p>Organize, acompanhe e gerencie sua coleção de mangás de forma fácil e intuitiva.</p>
+          <h1>Catalog</h1>
+          <p>Organize a sua coleção de maneira rápida e simples.</p>
           <div className="auth-buttons">
             <Link to="/login" className="btn btn-primary">Entrar</Link>
             <Link to="/signup" className="btn btn-secondary">Cadastrar</Link>
@@ -93,20 +152,65 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="quick-actions">
-        <h2>Ações Rápidas</h2>
-        <div className="actions-grid">
-          <Link to="/search" className="action-card">
-            <span className="action-icon">🔍</span>
-            <h3>Buscar Mangás</h3>
-            <p>Encontre novos mangás para adicionar à sua coleção</p>
-          </Link>
-          <Link to="/collections" className="action-card">
-            <span className="action-icon">📚</span>
-            <h3>Minhas Coleções</h3>
-            <p>Gerencie suas coleções de mangás</p>
-          </Link>
-        </div>
+      <div className="collections-table-section">
+        <h2>Minhas Coleções</h2>
+        {collectionsData.length === 0 ? (
+          <div className="empty-collections">
+            <p>Você ainda não tem coleções cadastradas.</p>
+            <Link to="/collections" className="btn btn-primary">
+              Criar Coleção
+            </Link>
+          </div>
+        ) : (
+          <div className="collections-table-container">
+            <table className="collections-table">
+              <thead>
+                <tr>
+                  <th>Nome da Coleção</th>
+                  <th>Volumes</th>
+                  <th>Minha Nota</th>
+                  <th>Investimento Total</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {collectionsData.map((collection) => (
+                  <tr key={collection.id}>
+                    <td className="collection-name">{collection.name}</td>
+                    <td className="collection-volumes">
+                      {collection.totalVolumes !== null
+                        ? `${collection.ownedVolumes} / ${collection.totalVolumes}`
+                        : collection.ownedVolumes}
+                    </td>
+                    <td className="collection-rating">
+                      {collection.averageRating !== null
+                        ? `${formatRating(collection.averageRating)}/5`
+                        : 'Sem nota'}
+                    </td>
+                    <td className="collection-cost">R$ {collection.totalCost.toFixed(2)}</td>
+                    <td className="collection-actions">
+                      <button
+                        onClick={() => navigate(`/collections/${collection.id}`)}
+                        className="btn-view"
+                      >
+                        Ver
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                <tr className="total-row">
+                  <td colSpan="3" className="total-label">
+                    <strong>Total Geral</strong>
+                  </td>
+                  <td className="total-cost">
+                    <strong>R$ {stats.totalCost.toFixed(2)}</strong>
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

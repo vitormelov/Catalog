@@ -1,4 +1,12 @@
 /* Estilos globais da aplicação */
 #root {
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }

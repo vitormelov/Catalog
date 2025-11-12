@@ -5,12 +5,32 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
   const imageUrl = manga.imageUrl || '/placeholder-manga.jpg';
   const title = manga.title || '';
   const titleEnglish = manga.titleEnglish || '';
-  const rating = manga.rating || 0;
+  const rating = manga.rating ?? null;
   const volumes = manga.volumes || [];
+  const totalVolumes = manga.totalVolumes || null;
+  const ownedVolumesCount = volumes.length;
 
-  // Renderizar nota numérica (1 a 5 com incrementos de 0,5)
+  // Obter significado da nota
+  const getRatingMeaning = (rating) => {
+    const ratingMeanings = {
+      5: 'obra-prima',
+      4.5: 'excelente',
+      4: 'muito bom',
+      3.5: 'bom',
+      3: 'ok',
+      2.5: 'mediano',
+      2: 'ruim',
+      1.5: 'muito ruim',
+      1: 'lixo',
+      0.5: 'muito lixo',
+      0: 'absurdamente horrível',
+    };
+    return ratingMeanings[rating] || '';
+  };
+
+  // Renderizar nota numérica (0 a 5 com incrementos de 0,5)
   const renderRating = (rawRating) => {
-    if (rawRating === null || rawRating === undefined || rawRating === 0) {
+    if (rawRating === null || rawRating === undefined) {
       return <span className="no-rating">Sem nota</span>;
     }
 
@@ -20,16 +40,21 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
       return <span className="no-rating">Sem nota</span>;
     }
 
-    const clampedRating = Math.min(Math.max(numericRating, 1), 5);
+    const clampedRating = Math.min(Math.max(numericRating, 0), 5);
     const roundedRating = Math.round(clampedRating * 2) / 2;
     const displayValue = Number.isInteger(roundedRating)
       ? roundedRating.toFixed(0)
       : roundedRating.toFixed(1);
+    
+    const meaning = getRatingMeaning(roundedRating);
 
     return (
       <div className="rating-number">
         <span className="rating-number-value">{displayValue}</span>
         <span className="rating-number-scale">/5</span>
+        {meaning && (
+          <span className="rating-meaning">({meaning})</span>
+        )}
       </div>
     );
   };
@@ -61,6 +86,19 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
             <strong>Minha Nota:</strong>
             {renderRating(rating)}
           </div>
+          {totalVolumes !== null && (
+            <div className="manga-volumes-info">
+              <strong>Volumes:</strong>
+              <span className="volumes-count">
+                {ownedVolumesCount} / {totalVolumes}
+              </span>
+              {ownedVolumesCount >= totalVolumes ? (
+                <span className="collection-status complete">Coleção Completa</span>
+              ) : (
+                <span className="collection-status incomplete">Coleção Incompleta</span>
+              )}
+            </div>
+          )}
           {manga.notes && (
             <div className="manga-notes">
               <strong>Observações:</strong>

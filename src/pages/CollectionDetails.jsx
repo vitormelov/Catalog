@@ -204,14 +204,13 @@ const CollectionDetails = () => {
 
   return (
     <div className="collection-details-container">
-      <div
-        className={`collection-header${headerImage ? ' has-cover' : ''}`}
-        style={
-          headerImage
-            ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${headerImage})` }
-            : undefined
-        }
-      >
+      <div className={`collection-header${headerImage ? ' has-cover' : ''}`}>
+        {headerImage && (
+          <div 
+            className="collection-header-bg"
+            style={{ backgroundImage: `url(${headerImage})` }}
+          />
+        )}
         <button onClick={() => navigate('/collections')} className="back-btn">
           ← Voltar
         </button>

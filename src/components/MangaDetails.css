@@ -49,6 +49,48 @@
   font-size: 0.9rem;
 }
 
+.manga-volumes-info {
+  margin-bottom: 1rem;
+}
+
+.manga-volumes-info strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.manga-volumes-info .volumes-count {
+  display: inline-block;
+  margin-right: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.collection-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.collection-status.complete {
+  background: #d4edda;
+  color: #155724;
+}
+
+.collection-status.incomplete {
+  background: #fff3cd;
+  color: #856404;
+}
+
 .rating-number {
   display: inline-flex;
   align-items: baseline;
@@ -56,6 +98,7 @@
   padding: 0.25rem 0.5rem;
   background: #f3f4ff;
   border-radius: 6px;
+  flex-wrap: wrap;
 }
 
 .rating-number-value {
@@ -68,6 +111,14 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: #667eea;
+}
+
+.rating-meaning {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4a5568;
+  font-style: italic;
+  margin-left: 0.2rem;
 }
 
 .no-rating {
