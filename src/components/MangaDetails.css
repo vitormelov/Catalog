@@ -49,55 +49,25 @@
   font-size: 0.9rem;
 }
 
-.rating-stars {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+.rating-number {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.25rem 0.5rem;
+  background: #f3f4ff;
+  border-radius: 6px;
 }
 
-.rating-stars .star-filled {
-  filter: grayscale(0%);
-  opacity: 1;
+.rating-number-value {
   font-size: 1.2rem;
+  font-weight: 700;
+  color: #2d3748;
 }
 
-.rating-stars .star-empty {
-  filter: grayscale(100%);
-  opacity: 0.3;
-  font-size: 1.2rem;
-}
-
-.rating-stars .star-half {
-  position: relative;
-  display: inline-block;
-  font-size: 1.2rem;
-}
-
-.rating-stars .star-half::before {
-  content: '⭐';
-  position: absolute;
-  left: 0;
-  width: 50%;
-  overflow: hidden;
-  filter: grayscale(0%);
-  opacity: 1;
-}
-
-.rating-stars .star-half::after {
-  content: '⭐';
-  position: absolute;
-  right: 0;
-  width: 50%;
-  overflow: hidden;
-  filter: grayscale(100%);
-  opacity: 0.3;
-}
-
-.rating-stars .rating-value {
-  margin-left: 0.5rem;
-  color: #667eea;
+.rating-number-scale {
+  font-size: 0.85rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  color: #667eea;
 }
 
 .no-rating {
@@ -137,6 +107,12 @@
   margin-bottom: 1rem;
 }
 
+.volumes-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
 .volumes-header h4 {
   margin: 0;
   color: #333;
@@ -150,7 +126,24 @@
 
 .total-spent strong {
   color: #667eea;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+}
+
+.add-volume-btn {
+  padding: 0.5rem 1rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.add-volume-btn:hover {
+  background: #5568d3;
+  transform: translateY(-1px);
 }
 
 .no-volumes {
@@ -162,56 +155,113 @@
   border-radius: 5px;
 }
 
-.volumes-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
+.volumes-crud {
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
 }
 
-.volume-detail-item {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 5px;
-  border: 1px solid #e0e0e0;
+.volumes-crud-header,
+.volumes-crud-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.2fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.volumes-crud-header {
+  background: #eef0ff;
+  color: #4a5568;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.volumes-crud-header .volume-col {
+  font-weight: 600;
+}
+
+.volumes-crud-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.volumes-crud-row {
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  color: #2d3748;
+  font-size: 0.95rem;
+}
+
+.volumes-crud-row:nth-child(odd) {
+  background: #fdfdfd;
+}
+
+.volume-col {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .volume-number {
   font-weight: 600;
-  color: #333;
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
 }
 
-.volume-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.volume-price,
-.volume-date {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.volume-price .label,
-.volume-date .label {
-  color: #666;
-  font-size: 0.85rem;
-}
-
-.volume-price .value,
-.volume-date .value {
-  color: #333;
+.volume-state.state-lacrado {
+  color: #0c7a3e;
   font-weight: 600;
-  font-size: 0.9rem;
 }
 
-.volume-date .value.undefined {
+.volume-state.state-aberto {
+  color: #b7791f;
+  font-weight: 600;
+}
+
+.volume-date.undefined {
   color: #999;
   font-style: italic;
   font-weight: 400;
+}
+
+.volume-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.crud-button {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.crud-button.edit {
+  background: #edf2ff;
+  color: #4c51bf;
+}
+
+.crud-button.edit:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.crud-button.delete {
+  background: #ffe5e5;
+  color: #c53030;
+}
+
+.crud-button.delete:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
 }
 
 @media (max-width: 768px) {
@@ -231,8 +281,18 @@
     gap: 0.5rem;
   }
 
-  .volumes-list {
-    grid-template-columns: 1fr;
+  .add-volume-btn {
+    align-self: stretch;
+    text-align: center;
+  }
+
+  .volumes-crud-header,
+  .volumes-crud-row {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .volume-actions {
+    justify-content: flex-start;
   }
 }
 

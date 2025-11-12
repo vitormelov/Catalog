@@ -1,32 +1,35 @@
 // Componente para mostrar detalhes do mangá na coleção (com volumes)
 import './MangaDetails.css';
 
-const MangaDetails = ({ manga }) => {
+const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
   const imageUrl = manga.imageUrl || '/placeholder-manga.jpg';
   const title = manga.title || '';
   const titleEnglish = manga.titleEnglish || '';
   const rating = manga.rating || 0;
   const volumes = manga.volumes || [];
 
-  // Renderizar estrelas para a nota (suporta meia estrela)
-  const renderStars = (rating) => {
-    if (!rating || rating === 0) return <span className="no-rating">Sem nota</span>;
-    
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    
+  // Renderizar nota numérica (1 a 5 com incrementos de 0,5)
+  const renderRating = (rawRating) => {
+    if (rawRating === null || rawRating === undefined || rawRating === 0) {
+      return <span className="no-rating">Sem nota</span>;
+    }
+
+    const numericRating = typeof rawRating === 'number' ? rawRating : parseFloat(rawRating);
+
+    if (Number.isNaN(numericRating)) {
+      return <span className="no-rating">Sem nota</span>;
+    }
+
+    const clampedRating = Math.min(Math.max(numericRating, 1), 5);
+    const roundedRating = Math.round(clampedRating * 2) / 2;
+    const displayValue = Number.isInteger(roundedRating)
+      ? roundedRating.toFixed(0)
+      : roundedRating.toFixed(1);
+
     return (
-      <div className="rating-stars">
-        {[1, 2, 3, 4, 5].map((star) => {
-          if (star <= fullStars) {
-            return <span key={star} className="star-filled">⭐</span>;
-          } else if (star === fullStars + 1 && hasHalfStar) {
-            return <span key={star} className="star-half">⭐</span>;
-          } else {
-            return <span key={star} className="star-empty">⭐</span>;
-          }
-        })}
-        <span className="rating-value">({rating}/5)</span>
+      <div className="rating-number">
+        <span className="rating-number-value">{displayValue}</span>
+        <span className="rating-number-scale">/5</span>
       </div>
     );
   };
@@ -56,7 +59,7 @@ const MangaDetails = ({ manga }) => {
           )}
           <div className="manga-rating-section">
             <strong>Minha Nota:</strong>
-            {renderStars(rating)}
+            {renderRating(rating)}
           </div>
           {manga.notes && (
             <div className="manga-notes">
@@ -69,35 +72,89 @@ const MangaDetails = ({ manga }) => {
 
       <div className="volumes-details">
         <div className="volumes-header">
-          <h4>Volumes Possuídos ({volumes.length})</h4>
-          {totalSpent > 0 && (
-            <div className="total-spent">
-              Total Gasto: <strong>R$ {totalSpent.toFixed(2)}</strong>
-            </div>
+          <div className="volumes-title">
+            <h4>Volumes Possuídos ({volumes.length})</h4>
+            {totalSpent > 0 && (
+              <div className="total-spent">
+                Total Gasto: <strong>R$ {totalSpent.toFixed(2)}</strong>
+              </div>
+            )}
+          </div>
+          {onAddVolume && (
+            <button
+              type="button"
+              className="add-volume-btn"
+              onClick={onAddVolume}
+            >
+              Adicionar Volume
+            </button>
           )}
         </div>
 
         {volumes.length === 0 ? (
           <p className="no-volumes">Nenhum volume registrado</p>
         ) : (
-          <div className="volumes-list">
-            {volumes.map((volume, index) => (
-              <div key={index} className="volume-detail-item">
-                <div className="volume-number">Volume {volume.volumeNumber}</div>
-                <div className="volume-info">
-                  <div className="volume-price">
-                    <span className="label">Preço:</span>
-                    <span className="value">R$ {(volume.price || 0).toFixed(2)}</span>
-                  </div>
-                  <div className="volume-date">
-                    <span className="label">Data de Compra:</span>
-                    <span className={`value ${!volume.purchaseDate ? 'undefined' : ''}`}>
-                      {formatDate(volume.purchaseDate)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="volumes-crud">
+            <div className="volumes-crud-header">
+              <span className="volume-col volume-number">Volume</span>
+              <span className="volume-col volume-state">Estado</span>
+              <span className="volume-col volume-price">Preço</span>
+              <span className="volume-col volume-date">Data de compra</span>
+              {(onEditVolume || onDeleteVolume) && (
+                <span className="volume-col volume-actions">Ações</span>
+              )}
+            </div>
+            <div className="volumes-crud-body">
+              {volumes
+                .slice()
+                .sort((a, b) => a.volumeNumber - b.volumeNumber)
+                .map((volume) => {
+                  const state = volume.state || volume.status || 'aberto';
+                  const displayState = state === 'lacrado' ? 'Lacrado' : 'Aberto';
+                  const formattedDate = volume.purchaseDate
+                    ? formatDate(volume.purchaseDate)
+                    : 'Indefinido';
+
+                  return (
+                    <div key={volume.volumeNumber} className="volumes-crud-row">
+                      <span className="volume-col volume-number">Vol. {volume.volumeNumber}</span>
+                      <span className={`volume-col volume-state state-${state}`}>{displayState}</span>
+                      <span className="volume-col volume-price">
+                        R$ {(volume.price || 0).toFixed(2)}
+                      </span>
+                      <span
+                        className={`volume-col volume-date ${
+                          !volume.purchaseDate ? 'undefined' : ''
+                        }`}
+                      >
+                        {formattedDate}
+                      </span>
+                      {(onEditVolume || onDeleteVolume) && (
+                        <span className="volume-col volume-actions">
+                          {onEditVolume && (
+                            <button
+                              type="button"
+                              className="crud-button edit"
+                              onClick={() => onEditVolume(volume)}
+                            >
+                              ✏️
+                            </button>
+                          )}
+                          {onDeleteVolume && (
+                            <button
+                              type="button"
+                              className="crud-button delete"
+                              onClick={() => onDeleteVolume(volume)}
+                            >
+                              🗑️
+                            </button>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         )}
       </div>

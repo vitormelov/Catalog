@@ -4,79 +4,51 @@ import './EditMangaModal.css';
 
 const EditMangaModal = ({ manga, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    rating: 0,
-    notes: '',
-    volumes: []
+    rating: '',
+    notes: ''
   });
 
   useEffect(() => {
     if (manga) {
       setFormData({
-        rating: manga.rating || 0,
-        notes: manga.notes || '',
-        volumes: manga.volumes || []
+        rating: manga.rating ? manga.rating.toString() : '',
+        notes: manga.notes || ''
       });
     }
   }, [manga]);
 
-  const handleVolumeChange = (index, field, value) => {
-    const newVolumes = [...formData.volumes];
-    if (!newVolumes[index]) {
-      newVolumes[index] = { volumeNumber: index + 1, price: 0, purchaseDate: '', owned: false };
+  const handleRatingChange = (value) => {
+    if (value === '') {
+      setFormData({ ...formData, rating: '' });
+      return;
     }
-    newVolumes[index][field] = field === 'price' ? parseFloat(value) || 0 : 
-                               field === 'owned' ? value : value;
-    setFormData({ ...formData, volumes: newVolumes });
+
+    let numericValue = parseFloat(value);
+
+    if (Number.isNaN(numericValue)) {
+      return;
+    }
+
+    numericValue = Math.min(Math.max(numericValue, 1), 5);
+    numericValue = Math.round(numericValue * 2) / 2;
+
+    setFormData({ ...formData, rating: numericValue.toString() });
   };
 
-  const handleAddVolume = () => {
-    const newVolumes = [...formData.volumes];
-    newVolumes.push({
-      volumeNumber: newVolumes.length + 1,
-      price: 0,
-      purchaseDate: '',
-      owned: false
-    });
-    setFormData({ ...formData, volumes: newVolumes });
-  };
-
-  const handleRemoveVolume = (index) => {
-    const newVolumes = formData.volumes.filter((_, i) => i !== index);
-    // Reordenar números dos volumes
-    newVolumes.forEach((vol, i) => {
-      vol.volumeNumber = i + 1;
-    });
-    setFormData({ ...formData, volumes: newVolumes });
-  };
-
-  // Sistema de meia estrela
-  const handleStarClick = (starIndex, isHalf) => {
-    const rating = isHalf ? starIndex + 0.5 : starIndex + 1;
-    setFormData({ ...formData, rating });
-  };
+  const numericRating = parseFloat(formData.rating);
+  const isRatingValid = !Number.isNaN(numericRating) && numericRating >= 1 && numericRating <= 5;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Filtrar apenas volumes que o usuário possui
-    const ownedVolumes = formData.volumes.filter(vol => vol.owned);
-    
-    if (ownedVolumes.length === 0) {
-      alert('Marque pelo menos um volume que você possui');
+    if (!isRatingValid) {
+      alert('Informe uma nota entre 1 e 5 (permitido 0,5).');
       return;
     }
 
-    // Processar volumes: se não tiver data, deixar como null
-    const processedVolumes = ownedVolumes.map(vol => ({
-      volumeNumber: vol.volumeNumber,
-      price: vol.price || 0,
-      purchaseDate: vol.purchaseDate || null,
-      owned: true
-    }));
-
     onSave({
-      ...formData,
-      volumes: processedVolumes
+      rating: numericRating,
+      notes: formData.notes
     });
   };
 
@@ -104,39 +76,23 @@ const EditMangaModal = ({ manga, onClose, onSave }) => {
 
         <form onSubmit={handleSubmit} className="manga-form">
           <div className="form-group">
-            <label>Sua Nota (1-5 estrelas) *</label>
-            <div className="star-rating-container">
-              <div className="star-rating">
-                {[0, 1, 2, 3, 4].map((starIndex) => {
-                  const isHalfFilled = formData.rating >= starIndex + 0.5 && formData.rating < starIndex + 1;
-                  const isFullFilled = formData.rating >= starIndex + 1;
-                  
-                  return (
-                    <div key={starIndex} className="star-wrapper">
-                      <div 
-                        className={`star-half left ${isHalfFilled || isFullFilled ? 'filled' : ''}`}
-                        onClick={() => handleStarClick(starIndex, true)}
-                        title={`${starIndex + 0.5} estrelas`}
-                      >
-                        <span className="star">⭐</span>
-                      </div>
-                      <div 
-                        className={`star-half right ${isFullFilled ? 'filled' : ''}`}
-                        onClick={() => handleStarClick(starIndex, false)}
-                        title={`${starIndex + 1} estrelas`}
-                      >
-                        <span className="star">⭐</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              {formData.rating > 0 && (
-                <span className="rating-text">{formData.rating} de 5 estrelas</span>
-              )}
+            <label>Sua Nota (1-5) *</label>
+            <div className="numeric-rating">
+              <input
+                type="number"
+                inputMode="decimal"
+                min="1"
+                max="5"
+                step="0.5"
+                placeholder="Ex: 4.5"
+                value={formData.rating}
+                onChange={(e) => handleRatingChange(e.target.value)}
+                required
+              />
+              <span className="rating-hint">Aceita valores com 0,5</span>
             </div>
-            {formData.rating === 0 && (
-              <small className="error-text">Selecione uma nota</small>
+            {!isRatingValid && (
+              <small className="error-text">Informe uma nota entre 1 e 5.</small>
             )}
           </div>
 
@@ -150,77 +106,11 @@ const EditMangaModal = ({ manga, onClose, onSave }) => {
             />
           </div>
 
-          <div className="volumes-section">
-            <div className="volumes-header">
-              <h3>Volumes que Possuo</h3>
-              <button type="button" onClick={handleAddVolume} className="add-volume-btn">
-                + Adicionar Volume
-              </button>
-            </div>
-            <p className="volumes-instruction">
-              Marque os volumes que você possui, informe o preço pago e a data de compra (opcional)
-            </p>
-
-            {formData.volumes.length === 0 ? (
-              <p className="no-volumes">Nenhum volume adicionado. Clique em "+ Adicionar Volume" para começar.</p>
-            ) : (
-              <div className="volumes-list">
-                {formData.volumes.map((volume, index) => (
-                  <div key={index} className="volume-item">
-                    <div className="volume-number">Vol. {volume.volumeNumber}</div>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        checked={volume.owned || false}
-                        onChange={(e) => handleVolumeChange(index, 'owned', e.target.checked)}
-                      />
-                      Possuo
-                    </label>
-                    {volume.owned && (
-                      <>
-                        <div className="volume-price">
-                          <label>Preço (R$)</label>
-                          <input
-                            type="number"
-                            placeholder="0.00"
-                            value={volume.price || ''}
-                            onChange={(e) => handleVolumeChange(index, 'price', e.target.value)}
-                            step="0.01"
-                            min="0"
-                            required
-                          />
-                        </div>
-                        <div className="volume-date">
-                          <label>Data de Compra (opcional)</label>
-                          <input
-                            type="date"
-                            value={volume.purchaseDate || ''}
-                            onChange={(e) => handleVolumeChange(index, 'purchaseDate', e.target.value)}
-                          />
-                          {!volume.purchaseDate && (
-                            <small className="date-hint">Deixar vazio = indefinido</small>
-                          )}
-                        </div>
-                      </>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveVolume(index)}
-                      className="remove-volume-btn"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
           <div className="modal-actions">
             <button type="button" onClick={onClose} className="btn-cancel">
               Cancelar
             </button>
-            <button type="submit" className="btn-save" disabled={formData.rating === 0}>
+            <button type="submit" className="btn-save" disabled={!isRatingValid}>
               Salvar
             </button>
           </div>
