@@ -291,28 +291,41 @@
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  font-size: 0.85rem;
   transition: transform 0.2s, opacity 0.2s;
+  padding: 0;
+}
+
+.crud-button .material-symbols-outlined {
+  font-size: 1.1rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 .crud-button.edit {
   background: #edf2ff;
+}
+
+.crud-button.edit .material-symbols-outlined {
   color: #4c51bf;
 }
 
 .crud-button.edit:hover {
   transform: translateY(-1px);
   opacity: 0.9;
+  background: #d6e4ff;
 }
 
 .crud-button.delete {
   background: #ffe5e5;
+}
+
+.crud-button.delete .material-symbols-outlined {
   color: #c53030;
 }
 
 .crud-button.delete:hover {
   transform: translateY(-1px);
   opacity: 0.9;
+  background: #ffcccc;
 }
 
 @media (max-width: 768px) {

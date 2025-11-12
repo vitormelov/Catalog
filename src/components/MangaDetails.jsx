@@ -175,7 +175,7 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
                               className="crud-button edit"
                               onClick={() => onEditVolume(volume)}
                             >
-                              ✏️
+                              <span className="material-symbols-outlined">edit</span>
                             </button>
                           )}
                           {onDeleteVolume && (
@@ -184,7 +184,7 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
                               className="crud-button delete"
                               onClick={() => onDeleteVolume(volume)}
                             >
-                              🗑️
+                              <span className="material-symbols-outlined">delete</span>
                             </button>
                           )}
                         </span>

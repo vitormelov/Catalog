@@ -8,8 +8,12 @@ const CollectionCard = ({ collection, onEdit, onDelete }) => {
       <div className="collection-header">
         <h3>{collection.name}</h3>
         <div className="collection-actions">
-          <button onClick={onEdit} className="edit-btn">✏️</button>
-          <button onClick={onDelete} className="delete-btn">🗑️</button>
+          <button onClick={onEdit} className="edit-btn">
+            <span className="material-symbols-outlined">edit</span>
+          </button>
+          <button onClick={onDelete} className="delete-btn">
+            <span className="material-symbols-outlined">delete</span>
+          </button>
         </div>
       </div>
       
@@ -21,6 +25,10 @@ const CollectionCard = ({ collection, onEdit, onDelete }) => {
         <div className="stat">
           <span className="stat-label">Mangás:</span>
           <span className="stat-value">{collection.mangaCount || 0}</span>
+        </div>
+        <div className="stat">
+          <span className="stat-label">Volumes:</span>
+          <span className="stat-value">{collection.volumesCount || 0}</span>
         </div>
         <div className="stat">
           <span className="stat-label">Investimento:</span>

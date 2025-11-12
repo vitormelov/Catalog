@@ -8,8 +8,12 @@ const GroupCard = ({ group, onEdit, onDelete }) => {
       <div className="group-header">
         <h3>{group.name}</h3>
         <div className="group-actions">
-          <button onClick={onEdit} className="edit-btn">✏️</button>
-          <button onClick={onDelete} className="delete-btn">🗑️</button>
+          <button onClick={onEdit} className="edit-btn">
+            <span className="material-symbols-outlined">edit</span>
+          </button>
+          <button onClick={onDelete} className="delete-btn">
+            <span className="material-symbols-outlined">delete</span>
+          </button>
         </div>
       </div>
       

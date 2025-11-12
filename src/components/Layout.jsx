@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
         <header className="header">
           <div className="header-content">
             <Link to="/" className="logo">
-              Catalog
+              CATALOG
             </Link>
             <nav className="nav">
               <Link to="/">Início</Link>

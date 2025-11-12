@@ -211,9 +211,6 @@ const CollectionDetails = () => {
             style={{ backgroundImage: `url(${headerImage})` }}
           />
         )}
-        <button onClick={() => navigate('/collections')} className="back-btn">
-          ← Voltar
-        </button>
         <div className="collection-header-content">
           <div className="collection-info">
             <h1>{collection.name}</h1>
@@ -265,13 +262,15 @@ const CollectionDetails = () => {
                     onClick={() => handleEditManga(manga)}
                     className="edit-manga-btn"
                   >
-                    ✏️ Editar
+                    <span className="material-symbols-outlined">edit</span>
+                    <span>Editar</span>
                   </button>
                   <button
                     onClick={() => handleDeleteManga(manga.id)}
                     className="remove-manga-btn"
                   >
-                    🗑️ Remover
+                    <span className="material-symbols-outlined">delete</span>
+                    <span>Remover</span>
                   </button>
                 </div>
               </div>

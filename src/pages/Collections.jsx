@@ -29,15 +29,24 @@ const Collections = () => {
   const loadCollections = async () => {
     try {
       const cols = await getUserCollections(currentUser.uid);
-      // Carregar custos totais para cada coleção
+      // Carregar custos totais e volumes para cada coleção
       const collectionsWithCosts = await Promise.all(
         cols.map(async (col) => {
           const totalCost = await getCollectionTotalCost(col.id);
           const mangas = await getMangaByCollection(col.id);
+          
+          // Calcular quantidade de volumes possuídos
+          let volumesCount = 0;
+          mangas.forEach((manga) => {
+            const volumes = manga.volumes || [];
+            volumesCount += volumes.length;
+          });
+          
           return {
             ...col,
             totalCost,
-            mangaCount: mangas.length
+            mangaCount: mangas.length,
+            volumesCount
           };
         })
       );

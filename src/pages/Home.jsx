@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { getUserCollections, getUserMangaCollection, getMangaByCollection, getCollectionTotalCost } from '../services/firestoreService';
+import { getUserCollections, getMangaByCollection, getCollectionTotalCost } from '../services/firestoreService';
 import './Home.css';
 
 const Home = () => {
@@ -10,7 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     collections: 0,
-    mangas: 0,
+    volumes: 0,
     totalCost: 0
   });
   const [collectionsData, setCollectionsData] = useState([]);
@@ -24,10 +24,7 @@ const Home = () => {
 
   const loadStats = async () => {
     try {
-      const [collections, mangas] = await Promise.all([
-        getUserCollections(currentUser.uid),
-        getUserMangaCollection(currentUser.uid)
-      ]);
+      const collections = await getUserCollections(currentUser.uid);
 
       // Calcular dados detalhados de cada coleção
       const collectionsWithData = await Promise.all(
@@ -69,12 +66,13 @@ const Home = () => {
         })
       );
 
-      // Calcular custos totais
+      // Calcular custos totais e volumes totais
       const totalCost = collectionsWithData.reduce((sum, col) => sum + col.totalCost, 0);
+      const totalVolumes = collectionsWithData.reduce((sum, col) => sum + col.ownedVolumes, 0);
 
       setStats({
         collections: collections.length,
-        mangas: mangas.length,
+        volumes: totalVolumes,
         totalCost
       });
       
@@ -110,7 +108,7 @@ const Home = () => {
         </video>
         <div className="video-overlay"></div>
         <div className="welcome-section">
-          <h1>Catalog</h1>
+          <h1>CATALOG</h1>
           <p>Organize a sua coleção de maneira rápida e simples.</p>
           <div className="auth-buttons">
             <Link to="/login" className="btn btn-primary">Entrar</Link>
@@ -130,21 +128,18 @@ const Home = () => {
       <h1>Dashboard</h1>
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-icon">📚</div>
           <div className="stat-info">
             <h3>{stats.collections}</h3>
             <p>Coleções</p>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">📖</div>
           <div className="stat-info">
-            <h3>{stats.mangas}</h3>
-            <p>Mangás</p>
+            <h3>{stats.volumes}</h3>
+            <p>Volumes</p>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">💰</div>
           <div className="stat-info">
             <h3>R$ {stats.totalCost.toFixed(2)}</h3>
             <p>Investimento Total</p>

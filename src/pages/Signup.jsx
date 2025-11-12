@@ -40,6 +40,7 @@ const Signup = () => {
 
   return (
     <div className="auth-container">
+      <h1 className="auth-title">CATALOG</h1>
       <div className="auth-card">
         <h2>Cadastrar</h2>
         {error && <div className="error-message">{error}</div>}
