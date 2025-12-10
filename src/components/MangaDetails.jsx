@@ -70,6 +70,23 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
     }
   };
 
+  // Formatar data e hora ou mostrar "indefinido"
+  const formatDateTime = (dateString) => {
+    if (!dateString) return 'Indefinido';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch {
+      return 'Indefinido';
+    }
+  };
+
   // Calcular total gasto
   const totalSpent = volumes.reduce((sum, vol) => sum + (vol.price || 0), 0);
 
@@ -138,6 +155,7 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
               <span className="volume-col volume-state">Estado</span>
               <span className="volume-col volume-price">Preço</span>
               <span className="volume-col volume-date">Data de compra</span>
+              <span className="volume-col volume-updated">Última atualização</span>
               {(onEditVolume || onDeleteVolume) && (
                 <span className="volume-col volume-actions">Ações</span>
               )}
@@ -151,6 +169,9 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
                   const displayState = state === 'lacrado' ? 'Lacrado' : 'Aberto';
                   const formattedDate = volume.purchaseDate
                     ? formatDate(volume.purchaseDate)
+                    : 'Indefinido';
+                  const formattedUpdated = volume.lastUpdated
+                    ? formatDateTime(volume.lastUpdated)
                     : 'Indefinido';
 
                   return (
@@ -166,6 +187,13 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
                         }`}
                       >
                         {formattedDate}
+                      </span>
+                      <span
+                        className={`volume-col volume-updated ${
+                          !volume.lastUpdated ? 'undefined' : ''
+                        }`}
+                      >
+                        {formattedUpdated}
                       </span>
                       {(onEditVolume || onDeleteVolume) && (
                         <span className="volume-col volume-actions">

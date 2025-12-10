@@ -216,7 +216,7 @@
 .volumes-crud-header,
 .volumes-crud-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1.2fr auto;
+  grid-template-columns: 1fr 1fr 1fr 1.2fr 1.5fr auto;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
@@ -271,6 +271,17 @@
 }
 
 .volume-date.undefined {
+  color: #999;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.volume-updated {
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.volume-updated.undefined {
   color: #999;
   font-style: italic;
   font-weight: 400;
@@ -353,10 +364,15 @@
   .volumes-crud-header,
   .volumes-crud-row {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 0.5rem;
   }
 
   .volume-actions {
     justify-content: flex-start;
+  }
+
+  .volume-updated {
+    font-size: 0.85rem;
   }
 }
 

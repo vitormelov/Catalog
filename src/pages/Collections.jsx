@@ -32,8 +32,8 @@ const Collections = () => {
       // Carregar custos totais e volumes para cada coleção
       const collectionsWithCosts = await Promise.all(
         cols.map(async (col) => {
-          const totalCost = await getCollectionTotalCost(col.id);
-          const mangas = await getMangaByCollection(col.id);
+          const totalCost = await getCollectionTotalCost(col.id, currentUser.uid);
+          const mangas = await getMangaByCollection(col.id, currentUser.uid);
           
           // Calcular quantidade de volumes possuídos
           let volumesCount = 0;
@@ -71,7 +71,7 @@ const Collections = () => {
   const handleSave = async (collectionData) => {
     try {
       if (editingCollection) {
-        await updateCollection(editingCollection.id, collectionData);
+        await updateCollection(editingCollection.id, currentUser.uid, collectionData);
       } else {
         await createCollection(currentUser.uid, collectionData);
       }
@@ -90,7 +90,7 @@ const Collections = () => {
     }
 
     try {
-      await deleteCollection(collectionId);
+      await deleteCollection(collectionId, currentUser.uid);
       loadCollections();
     } catch (error) {
       console.error('Erro ao deletar coleção:', error);

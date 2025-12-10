@@ -29,9 +29,9 @@ const Home = () => {
       // Calcular dados detalhados de cada coleção
       const collectionsWithData = await Promise.all(
         collections.map(async (col) => {
-          const mangasInCollection = await getMangaByCollection(col.id);
-          const totalCost = await getCollectionTotalCost(col.id);
-          
+          const mangasInCollection = await getMangaByCollection(col.id, currentUser.uid);
+          const totalCost = await getCollectionTotalCost(col.id, currentUser.uid);
+
           // Calcular volumes possuídos e totais
           let ownedVolumes = 0;
           let totalVolumes = 0;
@@ -154,8 +154,8 @@ const Home = () => {
             <p>Você ainda não tem coleções cadastradas.</p>
             <Link to="/collections" className="btn btn-primary">
               Criar Coleção
-            </Link>
-          </div>
+          </Link>
+        </div>
         ) : (
           <div className="collections-table-container">
             <table className="collections-table">
@@ -185,7 +185,7 @@ const Home = () => {
                     <td className="collection-cost">R$ {collection.totalCost.toFixed(2)}</td>
                     <td className="collection-actions">
                       <button
-                        onClick={() => navigate(`/collections/${collection.id}`)}
+                        onClick={() => navigate(`/collection/${collection.id}`)}
                         className="btn-view"
                       >
                         Ver

@@ -41,12 +41,12 @@ const CollectionDetails = () => {
   const loadData = async () => {
     try {
       const [col, mangasList, cost] = await Promise.all([
-        getCollection(id),
-        getMangaByCollection(id),
-        getCollectionTotalCost(id)
+        getCollection(id, currentUser.uid),
+        getMangaByCollection(id, currentUser.uid),
+        getCollectionTotalCost(id, currentUser.uid)
       ]);
       
-      if (col && col.userId === currentUser.uid) {
+      if (col) {
         setCollection(col);
         setMangas(mangasList);
         setTotalCost(cost);
@@ -94,7 +94,7 @@ const CollectionDetails = () => {
 
   const handleSaveManga = async (mangaData) => {
     try {
-      await updateMangaInCollection(editingManga.id, mangaData);
+      await updateMangaInCollection(editingManga.id, currentUser.uid, mangaData);
       setShowEditModal(false);
       setEditingManga(null);
       loadData();
@@ -116,7 +116,8 @@ const CollectionDetails = () => {
       volumeNumber: Number(vol.volumeNumber),
       state: (vol.state || vol.status) === 'lacrado' ? 'lacrado' : 'aberto',
       price: Number(vol.price) || 0,
-      purchaseDate: vol.purchaseDate || null
+      purchaseDate: vol.purchaseDate || null,
+      lastUpdated: vol.lastUpdated || null
     });
 
     try {
@@ -135,12 +136,15 @@ const CollectionDetails = () => {
       }
 
       const sanitizedVolume = normalizeVolume(volumeData);
+      
+      // Adicionar timestamp da última atualização
+      sanitizedVolume.lastUpdated = new Date().toISOString();
 
       const updatedVolumes = [...filteredVolumes, sanitizedVolume].sort(
         (a, b) => a.volumeNumber - b.volumeNumber
       );
 
-      await updateMangaInCollection(manga.id, {
+      await updateMangaInCollection(manga.id, currentUser.uid, {
         volumes: updatedVolumes
       });
 
@@ -168,7 +172,7 @@ const CollectionDetails = () => {
         (vol) => vol.volumeNumber !== volume.volumeNumber
       );
 
-      await updateMangaInCollection(manga.id, {
+      await updateMangaInCollection(manga.id, currentUser.uid, {
         volumes: updatedVolumes
       });
 
@@ -186,7 +190,7 @@ const CollectionDetails = () => {
     }
 
     try {
-      await deleteMangaFromCollection(mangaId);
+      await deleteMangaFromCollection(mangaId, currentUser.uid);
       loadData();
     } catch (error) {
       console.error('Erro ao remover mangá:', error);

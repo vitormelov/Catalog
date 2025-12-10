@@ -68,17 +68,23 @@ export const getUserCollections = async (userId) => {
 /**
  * Busca uma coleção específica
  * @param {string} collectionId - ID da coleção
- * @returns {Promise<Object>} Dados da coleção
+ * @param {string} userId - ID do usuário (para verificação de segurança)
+ * @returns {Promise<Object>} Dados da coleção ou null se não existir ou não pertencer ao usuário
  */
-export const getCollection = async (collectionId) => {
+export const getCollection = async (collectionId, userId) => {
   try {
     const docRef = doc(db, 'collections', collectionId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      return {
+      const collectionData = {
         id: docSnap.id,
         ...docSnap.data()
       };
+      // Verificar se a coleção pertence ao usuário
+      if (collectionData.userId !== userId) {
+        return null; // Retorna null se não pertencer ao usuário
+      }
+      return collectionData;
     }
     return null;
   } catch (error) {
@@ -90,10 +96,17 @@ export const getCollection = async (collectionId) => {
 /**
  * Atualiza uma coleção
  * @param {string} collectionId - ID da coleção
+ * @param {string} userId - ID do usuário (para verificação de segurança)
  * @param {Object} updates - Dados para atualizar
  */
-export const updateCollection = async (collectionId, updates) => {
+export const updateCollection = async (collectionId, userId, updates) => {
   try {
+    // Verificar se a coleção pertence ao usuário antes de atualizar
+    const collection = await getCollection(collectionId, userId);
+    if (!collection) {
+      throw new Error('Coleção não encontrada ou não pertence ao usuário');
+    }
+    
     const docRef = doc(db, 'collections', collectionId);
     await updateDoc(docRef, {
       ...updates,
@@ -108,9 +121,16 @@ export const updateCollection = async (collectionId, updates) => {
 /**
  * Deleta uma coleção
  * @param {string} collectionId - ID da coleção
+ * @param {string} userId - ID do usuário (para verificação de segurança)
  */
-export const deleteCollection = async (collectionId) => {
+export const deleteCollection = async (collectionId, userId) => {
   try {
+    // Verificar se a coleção pertence ao usuário antes de deletar
+    const collection = await getCollection(collectionId, userId);
+    if (!collection) {
+      throw new Error('Coleção não encontrada ou não pertence ao usuário');
+    }
+    
     await deleteDoc(doc(db, 'collections', collectionId));
   } catch (error) {
     console.error('Erro ao deletar coleção:', error);
@@ -174,13 +194,15 @@ export const getUserMangaCollection = async (userId) => {
 /**
  * Busca mangás de uma coleção específica
  * @param {string} collectionId - ID da coleção
+ * @param {string} userId - ID do usuário (para verificação de segurança)
  * @returns {Promise<Array>} Lista de mangás
  */
-export const getMangaByCollection = async (collectionId) => {
+export const getMangaByCollection = async (collectionId, userId) => {
   try {
     const q = query(
       collection(db, 'mangaCollection'),
-      where('collectionId', '==', collectionId)
+      where('collectionId', '==', collectionId),
+      where('userId', '==', userId)
     );
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
@@ -196,11 +218,24 @@ export const getMangaByCollection = async (collectionId) => {
 /**
  * Atualiza um mangá na coleção
  * @param {string} mangaId - ID do mangá
+ * @param {string} userId - ID do usuário (para verificação de segurança)
  * @param {Object} updates - Dados para atualizar
  */
-export const updateMangaInCollection = async (mangaId, updates) => {
+export const updateMangaInCollection = async (mangaId, userId, updates) => {
   try {
+    // Verificar se o mangá pertence ao usuário antes de atualizar
     const docRef = doc(db, 'mangaCollection', mangaId);
+    const docSnap = await getDoc(docRef);
+    
+    if (!docSnap.exists()) {
+      throw new Error('Mangá não encontrado');
+    }
+    
+    const mangaData = docSnap.data();
+    if (mangaData.userId !== userId) {
+      throw new Error('Mangá não pertence ao usuário');
+    }
+    
     await updateDoc(docRef, {
       ...updates,
       updatedAt: Timestamp.now()
@@ -214,10 +249,24 @@ export const updateMangaInCollection = async (mangaId, updates) => {
 /**
  * Deleta um mangá da coleção
  * @param {string} mangaId - ID do mangá
+ * @param {string} userId - ID do usuário (para verificação de segurança)
  */
-export const deleteMangaFromCollection = async (mangaId) => {
+export const deleteMangaFromCollection = async (mangaId, userId) => {
   try {
-    await deleteDoc(doc(db, 'mangaCollection', mangaId));
+    // Verificar se o mangá pertence ao usuário antes de deletar
+    const docRef = doc(db, 'mangaCollection', mangaId);
+    const docSnap = await getDoc(docRef);
+    
+    if (!docSnap.exists()) {
+      throw new Error('Mangá não encontrado');
+    }
+    
+    const mangaData = docSnap.data();
+    if (mangaData.userId !== userId) {
+      throw new Error('Mangá não pertence ao usuário');
+    }
+    
+    await deleteDoc(docRef);
   } catch (error) {
     console.error('Erro ao deletar mangá:', error);
     throw error;
@@ -227,11 +276,12 @@ export const deleteMangaFromCollection = async (mangaId) => {
 /**
  * Calcula o custo total de uma coleção
  * @param {string} collectionId - ID da coleção
+ * @param {string} userId - ID do usuário (para verificação de segurança)
  * @returns {Promise<number>} Custo total
  */
-export const getCollectionTotalCost = async (collectionId) => {
+export const getCollectionTotalCost = async (collectionId, userId) => {
   try {
-    const mangas = await getMangaByCollection(collectionId);
+    const mangas = await getMangaByCollection(collectionId, userId);
     return mangas.reduce((total, manga) => {
       const volumesCost = (manga.volumes || []).reduce((sum, vol) => {
         return sum + (vol.price || 0);
