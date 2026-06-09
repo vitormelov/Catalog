@@ -293,3 +293,215 @@ export const getCollectionTotalCost = async (collectionId, userId) => {
     return 0;
   }
 };
+
+// ========== BIBLIOTECA PESSOAL (MANGÁS E ANIMES) ==========
+
+/**
+ * Adiciona um mangá à biblioteca pessoal do usuário
+ */
+export const addMangaToLibrary = async (userId, mangaData) => {
+  try {
+    const existing = await getMangaByMalId(userId, mangaData.mangaId);
+    if (existing) return existing.id;
+
+    const docRef = await addDoc(collection(db, 'mangaCollection'), {
+      ...mangaData,
+      userId,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now()
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Erro ao adicionar mangá à biblioteca:', error);
+    throw error;
+  }
+};
+
+/**
+ * Busca um mangá da biblioteca pelo ID do documento Firestore
+ */
+export const getMangaById = async (mangaId, userId) => {
+  try {
+    const docRef = doc(db, 'mangaCollection', mangaId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return null;
+    const data = { id: docSnap.id, ...docSnap.data() };
+    if (data.userId !== userId) return null;
+    return data;
+  } catch (error) {
+    console.error('Erro ao buscar mangá:', error);
+    throw error;
+  }
+};
+
+/**
+ * Busca um mangá na biblioteca pelo ID do MyAnimeList
+ */
+export const getMangaByMalId = async (userId, malId) => {
+  try {
+    const q = query(
+      collection(db, 'mangaCollection'),
+      where('userId', '==', userId),
+      where('mangaId', '==', malId)
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) return null;
+    const docSnap = querySnapshot.docs[0];
+    return { id: docSnap.id, ...docSnap.data() };
+  } catch (error) {
+    console.error('Erro ao buscar mangá por MAL ID:', error);
+    throw error;
+  }
+};
+
+/**
+ * Retorna os IDs do MyAnimeList dos mangás na biblioteca do usuário
+ */
+export const getUserMangaMalIds = async (userId) => {
+  const mangas = await getUserMangaCollection(userId);
+  return new Set(mangas.map((m) => m.mangaId).filter(Boolean));
+};
+
+// ========== ANIMES (biblioteca pessoal) ==========
+
+/**
+ * Adiciona um anime à biblioteca pessoal do usuário
+ */
+export const addAnimeToLibrary = async (userId, animeData) => {
+  try {
+    const existing = await getAnimeByMalId(userId, animeData.animeId);
+    if (existing) return existing.id;
+
+    const docRef = await addDoc(collection(db, 'animeCollection'), {
+      ...animeData,
+      userId,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now()
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Erro ao adicionar anime à biblioteca:', error);
+    throw error;
+  }
+};
+
+/**
+ * Busca todos os animes do usuário
+ */
+export const getUserAnimeCollection = async (userId) => {
+  try {
+    const q = query(
+      collection(db, 'animeCollection'),
+      where('userId', '==', userId)
+    );
+    const querySnapshot = await getDocs(q);
+    const animes = querySnapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+    return animes.sort((a, b) => {
+      const aTime = a.createdAt?.toMillis() || 0;
+      const bTime = b.createdAt?.toMillis() || 0;
+      return bTime - aTime;
+    });
+  } catch (error) {
+    console.error('Erro ao buscar coleção de animes:', error);
+    throw error;
+  }
+};
+
+/**
+ * Busca um anime na biblioteca pelo ID do MyAnimeList
+ */
+export const getAnimeByMalId = async (userId, malId) => {
+  try {
+    const q = query(
+      collection(db, 'animeCollection'),
+      where('userId', '==', userId),
+      where('animeId', '==', malId)
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) return null;
+    const docSnap = querySnapshot.docs[0];
+    return { id: docSnap.id, ...docSnap.data() };
+  } catch (error) {
+    console.error('Erro ao buscar anime por MAL ID:', error);
+    throw error;
+  }
+};
+
+/**
+ * Retorna os IDs do MyAnimeList dos animes na biblioteca do usuário
+ */
+export const getUserAnimeMalIds = async (userId) => {
+  const animes = await getUserAnimeCollection(userId);
+  return new Set(animes.map((a) => a.animeId).filter(Boolean));
+};
+
+/**
+ * Busca um anime da biblioteca pelo ID do documento Firestore
+ */
+export const getAnimeById = async (animeId, userId) => {
+  try {
+    const docRef = doc(db, 'animeCollection', animeId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return null;
+    const data = { id: docSnap.id, ...docSnap.data() };
+    if (data.userId !== userId) return null;
+    return data;
+  } catch (error) {
+    console.error('Erro ao buscar anime:', error);
+    throw error;
+  }
+};
+
+/**
+ * Atualiza um anime na biblioteca
+ */
+export const updateAnimeInCollection = async (animeId, userId, updates) => {
+  try {
+    const docRef = doc(db, 'animeCollection', animeId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      throw new Error('Anime não encontrado');
+    }
+
+    const animeData = docSnap.data();
+    if (animeData.userId !== userId) {
+      throw new Error('Anime não pertence ao usuário');
+    }
+
+    await updateDoc(docRef, {
+      ...updates,
+      updatedAt: Timestamp.now()
+    });
+  } catch (error) {
+    console.error('Erro ao atualizar anime:', error);
+    throw error;
+  }
+};
+
+/**
+ * Deleta um anime da biblioteca
+ */
+export const deleteAnimeFromCollection = async (animeId, userId) => {
+  try {
+    const docRef = doc(db, 'animeCollection', animeId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      throw new Error('Anime não encontrado');
+    }
+
+    const animeData = docSnap.data();
+    if (animeData.userId !== userId) {
+      throw new Error('Anime não pertence ao usuário');
+    }
+
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error('Erro ao deletar anime:', error);
+    throw error;
+  }
+};

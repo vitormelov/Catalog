@@ -27,9 +27,10 @@ const Layout = ({ children }) => {
               CATALOG
             </Link>
             <nav className="nav">
-              <Link to="/">Início</Link>
-              <Link to="/collections">Coleções</Link>
-              <Link to="/search">Buscar Mangás</Link>
+              <Link to="/">Home</Link>
+              <Link to="/my-mangas">Meus Mangás</Link>
+              <Link to="/my-animes">Meus Animes</Link>
+              <Link to="/ranking">Ranking</Link>
               <span className="user-email">{currentUser.email}</span>
               <button onClick={handleLogout} className="logout-btn">
                 Sair

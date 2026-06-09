@@ -1,0 +1,46 @@
+.volume-mark-modal {
+  max-width: 480px;
+}
+
+.volume-mark-form select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: white;
+}
+
+.volume-mark-form select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.volume-mark-modal .modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.modal-actions-right {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.btn-remove-volume {
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: 2px solid #ef4444;
+  color: #ef4444;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-remove-volume:hover {
+  background: #ef4444;
+  color: white;
+}

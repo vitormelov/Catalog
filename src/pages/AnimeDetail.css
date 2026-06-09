@@ -1,0 +1,181 @@
+.anime-detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.anime-detail-header {
+  display: flex;
+  gap: 2rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.anime-detail-cover {
+  width: 160px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.anime-detail-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.anime-detail-info h1 {
+  margin: 0 0 0.5rem;
+  color: #1a1a1a;
+  font-size: 1.6rem;
+  line-height: 1.3;
+}
+
+.anime-detail-subtitle {
+  margin: 0 0 0.5rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+.anime-episodes-info {
+  margin: 0 0 1.25rem;
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.tracking-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tracking-section h2 {
+  margin: 0 0 1.25rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.tracking-form .form-group {
+  margin-bottom: 1.25rem;
+}
+
+.tracking-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.status-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.status-option {
+  padding: 0.6rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.status-option:hover {
+  border-color: #667eea;
+}
+
+.status-option.active.status-assistindo {
+  background: #dbeafe;
+  border-color: #1d4ed8;
+  color: #1d4ed8;
+}
+
+.status-option.active.status-finalizado {
+  background: #d1fae5;
+  border-color: #047857;
+  color: #047857;
+}
+
+.status-option.active.status-dropado {
+  background: #fee2e2;
+  border-color: #b91c1c;
+  color: #b91c1c;
+}
+
+.status-option.active.status-querendo_assistir {
+  background: #f3e8ff;
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+.tracking-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.tracking-dates input[type='date'] {
+  width: 100%;
+  padding: 0.65rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.tracking-dates input[type='date']:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.date-saved-hint {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.btn-save-tracking {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-save-tracking:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn-save-tracking:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .anime-detail-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .tracking-dates {
+    grid-template-columns: 1fr;
+  }
+
+  .status-options {
+    justify-content: center;
+  }
+}

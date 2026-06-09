@@ -1,97 +1,169 @@
-// Página inicial
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { getUserCollections, getMangaByCollection, getCollectionTotalCost } from '../services/firestoreService';
+import {
+  searchManga,
+  searchAnime,
+  getPopularManga,
+  getPopularAnime,
+} from '../services/mangaApi';
+import {
+  addMangaToLibrary,
+  addAnimeToLibrary,
+  getUserMangaMalIds,
+  getUserAnimeMalIds,
+} from '../services/firestoreService';
+import {
+  jikanMangaToLibrary,
+  jikanAnimeToLibrary,
+} from '../utils/mediaHelpers';
+import MediaListItem from '../components/MediaListItem';
 import './Home.css';
 
 const Home = () => {
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    collections: 0,
-    volumes: 0,
-    totalCost: 0
-  });
-  const [collectionsData, setCollectionsData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [mediaType, setMediaType] = useState('manga');
+  const [results, setResults] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [popularManga, setPopularManga] = useState([]);
+  const [popularAnime, setPopularAnime] = useState([]);
+  const [loadingTrending, setLoadingTrending] = useState(false);
+  const [userMangaIds, setUserMangaIds] = useState(new Set());
+  const [userAnimeIds, setUserAnimeIds] = useState(new Set());
+  const [addingId, setAddingId] = useState(null);
 
-  useEffect(() => {
-    if (currentUser) {
-      loadStats();
+  const loadUserLibrary = useCallback(async () => {
+    if (!currentUser) return;
+    try {
+      const [mangaIds, animeIds] = await Promise.all([
+        getUserMangaMalIds(currentUser.uid),
+        getUserAnimeMalIds(currentUser.uid),
+      ]);
+      setUserMangaIds(mangaIds);
+      setUserAnimeIds(animeIds);
+    } catch (err) {
+      console.error('Erro ao carregar biblioteca:', err);
     }
   }, [currentUser]);
 
-  const loadStats = async () => {
+  useEffect(() => {
+    if (currentUser) {
+      loadUserLibrary();
+    }
+  }, [currentUser, loadUserLibrary]);
+
+  useEffect(() => {
+    if (currentUser && !hasSearched) {
+      loadTrending();
+    }
+  }, [currentUser, hasSearched]);
+
+  const loadTrending = async () => {
+    setLoadingTrending(true);
     try {
-      const collections = await getUserCollections(currentUser.uid);
+      const [manga, anime] = await Promise.all([
+        getPopularManga(),
+        getPopularAnime(),
+      ]);
+      setPopularManga(manga);
+      setPopularAnime(anime);
+    } catch (err) {
+      console.error('Erro ao carregar trending:', err);
+    } finally {
+      setLoadingTrending(false);
+    }
+  };
 
-      // Calcular dados detalhados de cada coleção
-      const collectionsWithData = await Promise.all(
-        collections.map(async (col) => {
-          const mangasInCollection = await getMangaByCollection(col.id, currentUser.uid);
-          const totalCost = await getCollectionTotalCost(col.id, currentUser.uid);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
 
-          // Calcular volumes possuídos e totais
-          let ownedVolumes = 0;
-          let totalVolumes = 0;
-          const ratings = [];
-          
-          mangasInCollection.forEach((manga) => {
-            const volumes = manga.volumes || [];
-            ownedVolumes += volumes.length;
-            
-            if (manga.totalVolumes !== null && manga.totalVolumes !== undefined) {
-              totalVolumes += manga.totalVolumes;
-            }
-            
-            if (manga.rating !== null && manga.rating !== undefined) {
-              ratings.push(manga.rating);
-            }
-          });
-          
-          // Calcular nota média
-          const averageRating = ratings.length > 0
-            ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
-            : null;
-          
-          return {
-            ...col,
-            ownedVolumes,
-            totalVolumes: totalVolumes > 0 ? totalVolumes : null,
-            averageRating,
-            totalCost,
-            mangaCount: mangasInCollection.length
-          };
-        })
-      );
+    setLoading(true);
+    setError('');
+    setHasSearched(true);
 
-      // Calcular custos totais e volumes totais
-      const totalCost = collectionsWithData.reduce((sum, col) => sum + col.totalCost, 0);
-      const totalVolumes = collectionsWithData.reduce((sum, col) => sum + col.ownedVolumes, 0);
-
-      setStats({
-        collections: collections.length,
-        volumes: totalVolumes,
-        totalCost
-      });
-      
-      setCollectionsData(collectionsWithData);
-    } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
+    try {
+      const data =
+        mediaType === 'manga'
+          ? await searchManga(searchQuery)
+          : await searchAnime(searchQuery);
+      setResults(data);
+    } catch (err) {
+      setError('Erro ao buscar. Tente novamente.');
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const formatRating = (rating) => {
-    if (rating === null || rating === undefined) {
-      return 'Sem nota';
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setResults([]);
+    setHasSearched(false);
+    setError('');
+  };
+
+  const handleAddToCollection = async (item, type) => {
+    if (!currentUser) return;
+
+    setAddingId(item.mal_id);
+    try {
+      if (type === 'manga') {
+        await addMangaToLibrary(currentUser.uid, jikanMangaToLibrary(item));
+        setUserMangaIds((prev) => new Set([...prev, item.mal_id]));
+      } else {
+        await addAnimeToLibrary(currentUser.uid, jikanAnimeToLibrary(item));
+        setUserAnimeIds((prev) => new Set([...prev, item.mal_id]));
+      }
+    } catch (err) {
+      console.error('Erro ao adicionar:', err);
+      alert('Erro ao adicionar à coleção. Tente novamente.');
+    } finally {
+      setAddingId(null);
     }
-    const roundedRating = Math.round(rating * 2) / 2;
-    return Number.isInteger(roundedRating)
-      ? roundedRating.toFixed(0)
-      : roundedRating.toFixed(1);
+  };
+
+  const isInCollection = (item, type) => {
+    const ids = type === 'manga' ? userMangaIds : userAnimeIds;
+    return ids.has(item.mal_id);
+  };
+
+  const renderMediaList = (items, type, title = null) => {
+    if (items.length === 0) return null;
+
+    return (
+      <section className="media-section">
+        {title && <h2>{title}</h2>}
+        <div className="media-list">
+          <div className="media-list-header">
+            <span></span>
+            <span>Nome</span>
+            <span>{type === 'manga' ? 'Volumes/Cap.' : 'Episódios'}</span>
+            <span>Nota</span>
+            <span>Início</span>
+            <span>Término</span>
+            <span></span>
+          </div>
+          {items.map((item) => (
+            <MediaListItem
+              key={item.mal_id}
+              item={item}
+              type={type}
+              inCollection={isInCollection(item, type)}
+              onAdd={
+                isInCollection(item, type)
+                  ? undefined
+                  : () => handleAddToCollection(item, type)
+              }
+              adding={addingId === item.mal_id}
+            />
+          ))}
+        </div>
+      </section>
+    );
   };
 
   if (!currentUser) {
@@ -109,7 +181,7 @@ const Home = () => {
         <div className="video-overlay"></div>
         <div className="welcome-section">
           <h1>CATALOG</h1>
-          <p>Organize a sua coleção de maneira rápida e simples.</p>
+          <p>Organize a sua coleção de mangás e animes de maneira rápida e simples.</p>
           <div className="auth-buttons">
             <Link to="/login" className="btn btn-primary">Entrar</Link>
             <Link to="/signup" className="btn btn-secondary">Cadastrar</Link>
@@ -119,94 +191,79 @@ const Home = () => {
     );
   }
 
-  if (loading) {
-    return <div className="loading">Carregando...</div>;
-  }
-
   return (
-    <div className="home-container">
-      <h1>Dashboard</h1>
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-info">
-            <h3>{stats.collections}</h3>
-            <p>Coleções</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-info">
-            <h3>{stats.volumes}</h3>
-            <p>Volumes</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-info">
-            <h3>R$ {stats.totalCost.toFixed(2)}</h3>
-            <p>Investimento Total</p>
-          </div>
-        </div>
+    <div className="home-container home-search">
+      <div className="home-search-header">
+        <h1>Buscar</h1>
+        <p className="home-search-subtitle">
+          Encontre mangás e animes para catalogar na sua coleção
+        </p>
       </div>
 
-      <div className="collections-table-section">
-        <h2>Minhas Coleções</h2>
-        {collectionsData.length === 0 ? (
-          <div className="empty-collections">
-            <p>Você ainda não tem coleções cadastradas.</p>
-            <Link to="/collections" className="btn btn-primary">
-              Criar Coleção
-          </Link>
+      <form onSubmit={handleSearch} className="home-search-form">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder={`Digite o nome do ${mediaType === 'manga' ? 'mangá' : 'anime'}...`}
+          className="home-search-input"
+        />
+        <div className="media-type-toggle">
+          <button
+            type="button"
+            className={`type-btn ${mediaType === 'manga' ? 'active' : ''}`}
+            onClick={() => setMediaType('manga')}
+          >
+            Mangá
+          </button>
+          <button
+            type="button"
+            className={`type-btn ${mediaType === 'anime' ? 'active' : ''}`}
+            onClick={() => setMediaType('anime')}
+          >
+            Anime
+          </button>
         </div>
-        ) : (
-          <div className="collections-table-container">
-            <table className="collections-table">
-              <thead>
-                <tr>
-                  <th>Nome da Coleção</th>
-                  <th>Volumes</th>
-                  <th>Minha Nota</th>
-                  <th>Investimento Total</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {collectionsData.map((collection) => (
-                  <tr key={collection.id}>
-                    <td className="collection-name">{collection.name}</td>
-                    <td className="collection-volumes">
-                      {collection.totalVolumes !== null
-                        ? `${collection.ownedVolumes} / ${collection.totalVolumes}`
-                        : collection.ownedVolumes}
-                    </td>
-                    <td className="collection-rating">
-                      {collection.averageRating !== null
-                        ? `${formatRating(collection.averageRating)}/5`
-                        : 'Sem nota'}
-                    </td>
-                    <td className="collection-cost">R$ {collection.totalCost.toFixed(2)}</td>
-                    <td className="collection-actions">
-                      <button
-                        onClick={() => navigate(`/collection/${collection.id}`)}
-                        className="btn-view"
-                      >
-                        Ver
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                <tr className="total-row">
-                  <td colSpan="3" className="total-label">
-                    <strong>Total Geral</strong>
-                  </td>
-                  <td className="total-cost">
-                    <strong>R$ {stats.totalCost.toFixed(2)}</strong>
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+        <button type="submit" disabled={loading} className="home-search-btn">
+          {loading ? 'Buscando...' : 'Buscar'}
+        </button>
+      </form>
+
+      {error && <div className="home-error">{error}</div>}
+
+      {hasSearched && !loading && (
+        <div className="search-results">
+          <div className="search-results-header">
+            <h2>
+              Resultados para &ldquo;{searchQuery}&rdquo;
+              <span className="results-type-badge">
+                {mediaType === 'manga' ? 'Mangá' : 'Anime'}
+              </span>
+            </h2>
+            <button onClick={handleClearSearch} className="btn-clear-search">
+              Limpar busca
+            </button>
           </div>
-        )}
-      </div>
+          {results.length === 0 ? (
+            <p className="no-results">Nenhum resultado encontrado.</p>
+          ) : (
+            renderMediaList(results, mediaType)
+          )}
+        </div>
+      )}
+
+      {!hasSearched && (
+        <div className="trending-section">
+          {loadingTrending ? (
+            <div className="loading">Carregando destaques...</div>
+          ) : (
+            <>
+              {renderMediaList(popularManga, 'manga', '🔥 Mangás em alta')}
+              {renderMediaList(popularAnime, 'anime', '🔥 Animes em alta')}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };
