@@ -1,0 +1,56 @@
+:root {
+  /* Paleta principal */
+  --palette-navy: #061A3F;
+  --palette-indigo: #29398E;
+  --palette-blue: #0086FF;
+  --palette-cyan: #0BC0EF;
+  --palette-light: #F1F2F1;
+
+  /* Tipografia */
+  --font-ui: 'Outfit', system-ui, sans-serif;
+  --font-display: 'DM Serif Display', Georgia, serif;
+
+  /* Superfícies */
+  --color-bg: var(--palette-light);
+  --color-bg-elevated: var(--palette-light);
+  --color-surface: #ffffff;
+  --color-border: #d5dae3;
+  --color-border-strong: #b3bdd0;
+
+  /* Texto */
+  --color-text: var(--palette-navy);
+  --color-text-muted: var(--palette-indigo);
+  --color-text-faint: #5a6d8f;
+  --color-text-on-dark: var(--palette-light);
+
+  /* Marca */
+  --color-ink: var(--palette-navy);
+  --color-secondary: var(--palette-indigo);
+  --color-accent: var(--palette-blue);
+  --color-accent-hover: #006fd6;
+  --color-accent-dark: var(--palette-indigo);
+  --color-highlight: var(--palette-cyan);
+  --color-accent-soft: #e5f7fd;
+  --color-accent-muted: #b3ecfa;
+
+  /* Semânticas */
+  --color-success: #1a7f6e;
+  --color-success-soft: #e4f5f2;
+  --color-warning: var(--palette-indigo);
+  --color-danger: #c53030;
+  --color-danger-soft: #fdeeee;
+
+  /* Medalhas ranking */
+  --color-gold: #d4a017;
+  --color-silver: #8a96a8;
+  --color-bronze: #a67c52;
+
+  /* Efeitos */
+  --shadow-sm: 0 1px 3px rgba(6, 26, 63, 0.06);
+  --shadow-md: 0 4px 14px rgba(6, 26, 63, 0.09);
+  --shadow-lg: 0 12px 32px rgba(6, 26, 63, 0.12);
+  --shadow-accent: 0 4px 14px rgba(0, 134, 255, 0.25);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}

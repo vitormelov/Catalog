@@ -5,7 +5,7 @@ import {
   getAnimeById,
   updateAnimeInCollection,
 } from '../services/firestoreService';
-import { WATCH_STATUSES, formatDisplayDate } from '../utils/animeStats';
+import { WATCH_STATUSES, formatDisplayDate, formatPublicRating } from '../utils/animeStats';
 import './MangaDetail.css';
 import './AnimeDetail.css';
 
@@ -137,7 +137,7 @@ const AnimeDetail = () => {
             <div className="rating-card public-rating">
               <span className="rating-label">Nota do público</span>
               <span className="rating-value">
-                {anime.score != null ? `⭐ ${anime.score}/10` : '—'}
+                {anime.score != null ? formatPublicRating(anime.score) : '—'}
               </span>
             </div>
             <div className="rating-card personal-rating">

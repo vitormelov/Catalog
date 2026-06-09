@@ -1,16 +1,17 @@
 import {
   formatRating,
+  formatPublicRating,
   formatVolumesOwned,
   getMangaCollectionCost,
 } from '../utils/mangaStats';
+import { IconEye, IconTrash } from './Icons';
 import './MangaLibraryListItem.css';
-import './MediaListItem.css';
 
 const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => {
   const imageUrl = manga.imageUrl || '/placeholder-manga.jpg';
   const title = manga.title || '';
   const titleEnglish = manga.titleEnglish || '';
-  const publicRating = formatRating(manga.score);
+  const publicRating = formatPublicRating(manga.score);
   const personalRating = formatRating(manga.rating);
   const cost = getMangaCollectionCost(manga);
 
@@ -33,7 +34,7 @@ const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => 
         <span className="manga-library-mobile-label">Notas</span>
         <div className="ratings-comparison-cell">
           <span className="rating-personal" title="Minha nota">
-            {personalRating != null ? `${personalRating}/10` : '—'}
+            {personalRating != null ? personalRating : '—'}
           </span>
           <span className="rating-separator">/</span>
           <span className="rating-public" title="Nota do público">
@@ -54,7 +55,7 @@ const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => 
             onClick={onView}
             title="Ver detalhes"
           >
-            <span className="material-symbols-outlined">visibility</span>
+            <IconEye />
           </button>
         )}
         {onDelete && (
@@ -65,7 +66,7 @@ const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => 
             disabled={deleting}
             title="Remover da coleção"
           >
-            <span className="material-symbols-outlined">delete</span>
+            <IconTrash />
           </button>
         )}
       </div>

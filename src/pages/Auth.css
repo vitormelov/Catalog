@@ -9,22 +9,21 @@
 }
 
 .auth-title {
+  font-family: var(--font-display);
   font-size: 4rem;
   margin: 0;
-  font-weight: 800;
-  letter-spacing: -1px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--color-ink);
   text-align: center;
 }
 
 .auth-card {
-  background: white;
+  background: var(--color-surface);
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
   width: 100%;
   max-width: 400px;
 }
@@ -57,13 +56,13 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-accent);
 }
 
 .submit-btn {
   width: 100%;
   padding: 0.75rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-accent);
   color: white;
   border: none;
   border-radius: 5px;
@@ -98,7 +97,7 @@
 }
 
 .auth-link a {
-  color: #667eea;
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 500;
 }

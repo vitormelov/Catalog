@@ -6,7 +6,7 @@ import {
   updateMangaInCollection,
 } from '../services/firestoreService';
 import { getConditionLabel, normalizeVolume } from '../utils/volumeHelpers';
-import { sortVolumesByNumber } from '../utils/mangaStats';
+import { sortVolumesByNumber, formatPublicRating } from '../utils/mangaStats';
 import VolumeMarkModal from '../components/VolumeMarkModal';
 import './MangaDetail.css';
 
@@ -173,7 +173,7 @@ const MangaDetail = () => {
             <div className="rating-card public-rating">
               <span className="rating-label">Nota do público</span>
               <span className="rating-value">
-                {manga.score != null ? `⭐ ${manga.score}/10` : '—'}
+                {manga.score != null ? formatPublicRating(manga.score) : '—'}
               </span>
             </div>
             <div className="rating-card personal-rating">

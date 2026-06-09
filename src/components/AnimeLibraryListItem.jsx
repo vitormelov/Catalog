@@ -1,16 +1,17 @@
 import {
   formatRating,
+  formatPublicRating,
   formatDisplayDate,
   getWatchStatusLabel,
 } from '../utils/animeStats';
+import { IconEye, IconTrash } from './Icons';
 import './AnimeLibraryListItem.css';
-import './MediaListItem.css';
 
 const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => {
   const imageUrl = anime.imageUrl || '/placeholder-manga.jpg';
   const title = anime.title || '';
   const titleEnglish = anime.titleEnglish || '';
-  const publicRating = formatRating(anime.score);
+  const publicRating = formatPublicRating(anime.score);
   const personalRating = formatRating(anime.rating);
   const status = anime.watchStatus || 'querendo_assistir';
 
@@ -29,7 +30,7 @@ const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => 
         <span className="anime-library-mobile-label">Notas</span>
         <div className="ratings-comparison-cell">
           <span className="rating-personal" title="Minha nota">
-            {personalRating != null ? `${personalRating}/10` : '—'}
+            {personalRating != null ? personalRating : '—'}
           </span>
           <span className="rating-separator">/</span>
           <span className="rating-public" title="Nota do público">
@@ -60,7 +61,7 @@ const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => 
             onClick={onView}
             title="Ver detalhes"
           >
-            <span className="material-symbols-outlined">visibility</span>
+            <IconEye />
           </button>
         )}
         {onDelete && (
@@ -71,7 +72,7 @@ const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => 
             disabled={deleting}
             title="Remover da coleção"
           >
-            <span className="material-symbols-outlined">delete</span>
+            <IconTrash />
           </button>
         )}
       </div>

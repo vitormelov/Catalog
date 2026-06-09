@@ -1,3 +1,5 @@
+import { formatPublicRating } from '../utils/mangaStats';
+import { IconEye, IconTrash, IconPlus } from './Icons';
 import './MediaListItem.css';
 
 const formatDate = (dateString) => {
@@ -26,7 +28,7 @@ const MediaListItem = ({
   const isManga = type === 'manga';
   const title = item.title || '';
   const titleEnglish = item.title_english || item.titleEnglish || '';
-  const score = item.score;
+  const score = formatPublicRating(item.score);
 
   const countLabel = isManga
     ? [
@@ -63,7 +65,7 @@ const MediaListItem = ({
       </div>
       <div className="media-list-score" data-label="Nota">
         <span className="media-list-mobile-label">Nota</span>
-        {score != null ? `⭐ ${score}` : '—'}
+        {score != null ? score : '—'}
       </div>
       <div className="media-list-date" data-label="Início">
         <span className="media-list-mobile-label">Início</span>
@@ -83,7 +85,7 @@ const MediaListItem = ({
                 onClick={onView}
                 title="Ver detalhes"
               >
-                <span className="material-symbols-outlined">visibility</span>
+                <IconEye />
               </button>
             )}
             {onDelete && (
@@ -94,7 +96,7 @@ const MediaListItem = ({
                 disabled={deleting}
                 title="Remover da coleção"
               >
-                <span className="material-symbols-outlined">delete</span>
+                <IconTrash />
               </button>
             )}
           </div>
@@ -106,7 +108,7 @@ const MediaListItem = ({
             disabled={adding}
             title="Adicionar à coleção"
           >
-            {adding ? '…' : '+'}
+            {adding ? <span className="collection-btn-loading">…</span> : <IconPlus />}
           </button>
         ) : null}
       </div>

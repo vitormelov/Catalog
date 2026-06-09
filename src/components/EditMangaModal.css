@@ -119,7 +119,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-accent);
 }
 
 .form-group small {
@@ -193,7 +193,7 @@
 
 .add-volume-btn {
   padding: 0.5rem 1rem;
-  background: #667eea;
+  background: var(--color-accent);
   color: white;
   border: none;
   border-radius: 5px;
@@ -203,7 +203,7 @@
 }
 
 .add-volume-btn:hover {
-  background: #5568d3;
+  background: var(--color-accent-hover);
 }
 
 .volumes-list {
@@ -248,7 +248,7 @@
 .volume-field input:focus,
 .volume-field select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-accent);
   box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15);
 }
 
@@ -304,7 +304,7 @@
 }
 
 .btn-save {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-ink);
   color: white;
 }
 

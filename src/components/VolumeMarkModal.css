@@ -13,7 +13,7 @@
 
 .volume-mark-form select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-accent);
 }
 
 .volume-mark-modal .modal-actions {

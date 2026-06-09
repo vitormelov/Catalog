@@ -188,7 +188,7 @@
 
 .add-manga-btn {
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-ink);
   color: white;
   border: none;
   border-radius: 5px;
@@ -248,12 +248,12 @@
 }
 
 .edit-manga-btn {
-  background: #667eea;
+  background: var(--color-accent);
   color: white;
 }
 
 .edit-manga-btn:hover {
-  background: #5568d3;
+  background: var(--color-accent-hover);
   transform: translateY(-2px);
 }
 

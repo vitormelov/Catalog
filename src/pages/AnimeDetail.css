@@ -90,7 +90,7 @@
 }
 
 .status-option:hover {
-  border-color: #667eea;
+  border-color: var(--color-accent);
 }
 
 .status-option.active.status-assistindo {
@@ -133,7 +133,7 @@
 
 .tracking-dates input[type='date']:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-accent);
 }
 
 .date-saved-hint {
@@ -145,7 +145,7 @@
 
 .btn-save-tracking {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-ink);
   color: white;
   border: none;
   border-radius: 8px;

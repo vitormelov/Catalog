@@ -15,7 +15,7 @@
 .state-toggle {
   display: inline-flex;
   gap: 0.5rem;
-  background: #eef0ff;
+  background: var(--color-accent-soft);
   padding: 0.3rem;
   border-radius: 8px;
 }

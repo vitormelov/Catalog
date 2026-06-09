@@ -1,0 +1,172 @@
+/* Padrões reutilizáveis da interface */
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+}
+
+/* Botões de ação na biblioteca */
+.library-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+  padding: 0;
+  background: var(--color-surface);
+}
+
+.library-btn-view {
+  color: var(--color-ink);
+}
+
+.library-btn-view:hover {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: #fff;
+}
+
+.library-btn-delete {
+  color: var(--color-danger);
+}
+
+.library-btn-delete:hover:not(:disabled) {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: #fff;
+}
+
+.library-btn-delete:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Toggle mangá / anime */
+.type-btn {
+  padding: 0.85rem 1.25rem;
+  border: none;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: var(--font-ui);
+}
+
+.type-btn.active {
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.type-btn:hover:not(.active) {
+  background: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+/* Botão primário */
+.btn-primary,
+.home-search-btn,
+.submit-btn,
+.btn-save,
+.btn-save-tracking,
+.btn-library-link,
+.btn-save-rating,
+.btn-save-total {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.btn-primary:hover,
+.home-search-btn:hover:not(:disabled),
+.submit-btn:hover:not(:disabled),
+.btn-save:hover,
+.btn-save-tracking:hover:not(:disabled),
+.btn-library-link:hover,
+.btn-save-rating:hover:not(:disabled),
+.btn-save-total:hover {
+  background: var(--color-accent-hover);
+}
+
+/* Cabeçalhos de tabela / lista */
+.library-list-header {
+  padding: 0.75rem 1.25rem;
+  background: var(--color-ink);
+  color: var(--color-text-on-dark);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Cards */
+.surface-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Ordenação */
+.sort-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: var(--font-ui);
+}
+
+.sort-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.sort-btn.active {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: #fff;
+}
+
+/* Nota pessoal vs pública */
+.rating-personal {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.rating-public {
+  color: var(--color-highlight);
+  font-weight: 600;
+}
+
+.rating-separator {
+  color: var(--color-border-strong);
+  font-weight: 400;
+  margin: 0 0.15rem;
+}
+
+/* Botão adicionar coleção */
+.collection-btn-add {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+}
+
+.collection-btn-add:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}

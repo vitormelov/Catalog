@@ -27,10 +27,11 @@
   display: flex;
   gap: 0.75rem;
   margin-bottom: 2.5rem;
-  background: white;
+  background: var(--color-surface);
   padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .home-search-input {
@@ -44,7 +45,7 @@
 
 .home-search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-accent);
 }
 
 .media-type-toggle {
@@ -71,17 +72,17 @@
 }
 
 .type-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-ink);
   color: white;
 }
 
 .type-btn:hover:not(.active) {
-  background: #f5f5ff;
+  background: var(--color-accent-soft);
 }
 
 .home-search-btn {
   padding: 0.85rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-ink);
   color: white;
   border: none;
   border-radius: 8px;
@@ -94,7 +95,7 @@
 
 .home-search-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 4px 15px rgba(196, 64, 42, 0.25);
 }
 
 .home-search-btn:disabled {
@@ -132,7 +133,7 @@
 
 .results-type-badge {
   font-size: 0.8rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-ink);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -144,8 +145,8 @@
 .btn-clear-search {
   padding: 0.5rem 1rem;
   background: transparent;
-  border: 2px solid #667eea;
-  color: #667eea;
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -154,7 +155,7 @@
 }
 
 .btn-clear-search:hover {
-  background: #667eea;
+  background: var(--color-accent);
   color: white;
 }
 
@@ -243,15 +244,12 @@
 }
 
 .welcome-section h1 {
+  font-family: var(--font-display);
   font-size: 4rem;
   margin-bottom: 1.5rem;
-  color: #1a1a1a;
-  font-weight: 800;
-  letter-spacing: -1px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-ink);
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .welcome-section p {
@@ -281,27 +279,27 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-accent);
   color: white;
   border: none;
 }
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 25px rgba(196, 64, 42, 0.3);
 }
 
 .btn-secondary {
   background: rgba(255, 255, 255, 0.95);
-  color: #667eea;
-  border: 3px solid #667eea;
+  color: var(--color-accent);
+  border: 3px solid var(--color-accent);
 }
 
 .btn-secondary:hover {
   transform: translateY(-3px);
-  background: #667eea;
+  background: var(--color-accent);
   color: white;
-  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 25px rgba(196, 64, 42, 0.3);
 }
 
 .stats-grid {
@@ -379,7 +377,7 @@
 }
 
 .collections-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-ink);
   color: white;
 }
 
@@ -422,7 +420,7 @@
 }
 
 .collection-rating {
-  color: #667eea;
+  color: var(--color-accent);
   font-weight: 600;
 }
 
@@ -438,7 +436,7 @@
 
 .btn-view {
   padding: 0.5rem 1.25rem;
-  background: #667eea;
+  background: var(--color-accent);
   color: white;
   border: none;
   border-radius: 6px;
@@ -449,18 +447,18 @@
 }
 
 .btn-view:hover {
-  background: #5568d3;
+  background: var(--color-accent-hover);
   transform: translateY(-1px);
 }
 
 .total-row {
-  background: #f3f4ff !important;
-  border-top: 3px solid #667eea;
+  background: var(--color-accent-soft) !important;
+  border-top: 3px solid var(--color-accent);
   font-size: 1.05rem;
 }
 
 .total-row:hover {
-  background: #eef0ff !important;
+  background: var(--color-accent-soft) !important;
 }
 
 .total-label {

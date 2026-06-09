@@ -12,6 +12,14 @@ export const formatRating = (rating) => {
   return Number.isInteger(rounded) ? rounded.toFixed(0) : rounded.toFixed(1);
 };
 
+/** Nota do público (API) — preserva decimais, ex.: 8.09 */
+export const formatPublicRating = (score) => {
+  if (score === null || score === undefined) return null;
+  const numeric = typeof score === 'number' ? score : parseFloat(score);
+  if (Number.isNaN(numeric)) return null;
+  return parseFloat(numeric.toFixed(2)).toString();
+};
+
 export const formatVolumesOwned = (manga) => {
   const owned = getOwnedVolumesCount(manga);
   const total = manga.totalVolumes;

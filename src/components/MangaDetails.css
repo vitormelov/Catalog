@@ -96,7 +96,7 @@
   align-items: baseline;
   gap: 0.3rem;
   padding: 0.25rem 0.5rem;
-  background: #f3f4ff;
+  background: var(--color-accent-soft);
   border-radius: 6px;
   flex-wrap: wrap;
 }
@@ -110,7 +110,7 @@
 .rating-number-scale {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-accent);
 }
 
 .rating-meaning {
@@ -176,13 +176,13 @@
 }
 
 .total-spent strong {
-  color: #667eea;
+  color: var(--color-accent);
   font-size: 1.05rem;
 }
 
 .add-volume-btn {
   padding: 0.5rem 1rem;
-  background: #667eea;
+  background: var(--color-accent);
   color: white;
   border: none;
   border-radius: 6px;
@@ -193,7 +193,7 @@
 }
 
 .add-volume-btn:hover {
-  background: #5568d3;
+  background: var(--color-accent-hover);
   transform: translateY(-1px);
 }
 
@@ -223,7 +223,7 @@
 }
 
 .volumes-crud-header {
-  background: #eef0ff;
+  background: var(--color-accent-soft);
   color: #4a5568;
   text-transform: uppercase;
   font-size: 0.75rem;

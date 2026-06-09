@@ -1,6 +1,6 @@
-import { formatRating } from './mangaStats';
+import { formatRating, formatPublicRating } from './mangaStats';
 
-export { formatRating };
+export { formatRating, formatPublicRating };
 
 export const WATCH_STATUSES = [
   { value: 'assistindo', label: 'Assistindo' },

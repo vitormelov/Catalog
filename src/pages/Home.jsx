@@ -258,8 +258,8 @@ const Home = () => {
             <div className="loading">Carregando destaques...</div>
           ) : (
             <>
-              {renderMediaList(popularManga, 'manga', '🔥 Mangás em alta')}
-              {renderMediaList(popularAnime, 'anime', '🔥 Animes em alta')}
+              {renderMediaList(popularManga, 'manga', 'Mangás em alta')}
+              {renderMediaList(popularAnime, 'anime', 'Animes em alta')}
             </>
           )}
         </div>

@@ -15,13 +15,13 @@ const PodiumCard = ({ item, size }) => {
   return (
     <div className={`podium-card podium-${size}`}>
       {size === 'first' && (
-        <div className="podium-crown" aria-hidden="true">👑</div>
+        <div className="podium-first-badge" aria-hidden="true">1</div>
       )}
       <div className="podium-image-wrap">
         <img src={imageUrl} alt={item.title} />
       </div>
       <h3 className="podium-title">{item.title}</h3>
-      <span className="podium-rating">⭐ {rating}/10</span>
+      <span className="podium-rating">{rating}</span>
       <span className="podium-place">{getRankLabel(item.rank)}</span>
     </div>
   );
@@ -41,7 +41,7 @@ const RankingListItem = ({ item }) => {
           <span className="ranking-list-subtitle">{item.titleEnglish}</span>
         )}
       </div>
-      <span className="ranking-list-rating">⭐ {rating}/10</span>
+      <span className="ranking-list-rating">{rating}</span>
     </div>
   );
 };
