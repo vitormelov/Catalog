@@ -136,7 +136,7 @@
 }
 
 .manga-detail-stats strong {
-  color: #059669;
+  color: var(--color-success);
 }
 
 .volumes-section {
@@ -306,7 +306,7 @@
 }
 
 .owned-vol-price {
-  color: #059669;
+  color: var(--color-success);
   font-weight: 600;
 }
 

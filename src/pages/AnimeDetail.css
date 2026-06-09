@@ -94,27 +94,27 @@
 }
 
 .status-option.active.status-assistindo {
-  background: #dbeafe;
-  border-color: #1d4ed8;
-  color: #1d4ed8;
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .status-option.active.status-finalizado {
-  background: #d1fae5;
-  border-color: #047857;
-  color: #047857;
+  background: var(--color-success-soft);
+  border-color: var(--color-success);
+  color: var(--color-success);
 }
 
 .status-option.active.status-dropado {
-  background: #fee2e2;
-  border-color: #b91c1c;
-  color: #b91c1c;
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
 }
 
 .status-option.active.status-querendo_assistir {
-  background: #f3e8ff;
-  border-color: #7c3aed;
-  color: #7c3aed;
+  background: #dff7fc;
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
 }
 
 .tracking-dates {

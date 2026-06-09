@@ -86,7 +86,7 @@
 }
 
 .media-list-score {
-  color: var(--color-warning);
+  color: var(--color-highlight);
   font-weight: 600;
 }
 

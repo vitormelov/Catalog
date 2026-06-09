@@ -95,7 +95,7 @@
 
 .home-search-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(196, 64, 42, 0.25);
+  box-shadow: 0 4px 15px var(--shadow-accent);
 }
 
 .home-search-btn:disabled {
@@ -286,7 +286,7 @@
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 25px rgba(196, 64, 42, 0.3);
+  box-shadow: 0 6px 25px var(--shadow-accent);
 }
 
 .btn-secondary {
@@ -299,7 +299,7 @@
   transform: translateY(-3px);
   background: var(--color-accent);
   color: white;
-  box-shadow: 0 6px 25px rgba(196, 64, 42, 0.3);
+  box-shadow: 0 6px 25px var(--shadow-accent);
 }
 
 .stats-grid {
@@ -425,7 +425,7 @@
 }
 
 .collection-cost {
-  color: #059669;
+  color: var(--color-success);
   font-weight: 600;
   font-size: 1rem;
 }
@@ -468,7 +468,7 @@
 }
 
 .total-cost {
-  color: #059669;
+  color: var(--color-success);
   font-size: 1.2rem;
 }
 

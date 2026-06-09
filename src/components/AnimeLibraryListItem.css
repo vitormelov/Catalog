@@ -124,23 +124,23 @@
 }
 
 .status-assistindo {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
 }
 
 .status-finalizado {
-  background: #d1fae5;
-  color: #047857;
+  background: var(--color-success-soft);
+  color: var(--color-success);
 }
 
 .status-dropado {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
 }
 
 .status-querendo_assistir {
-  background: #f3e8ff;
-  color: #7c3aed;
+  background: #dff7fc;
+  color: var(--color-secondary);
 }
 
 .anime-library-date {

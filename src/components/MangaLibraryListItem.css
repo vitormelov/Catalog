@@ -60,7 +60,7 @@
 }
 
 .manga-library-total-row .total-cost {
-  color: #059669;
+  color: var(--color-success);
   font-size: 1.1rem;
 }
 
@@ -144,7 +144,7 @@
 
 .cost-value {
   font-weight: 600;
-  color: #059669;
+  color: var(--color-success);
 }
 
 .manga-library-actions {
@@ -189,7 +189,7 @@
 }
 
 .library-stat-value.investment {
-  color: #059669;
+  color: var(--color-success);
 }
 
 @media (max-width: 900px) {
