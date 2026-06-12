@@ -1,4 +1,21 @@
 import { formatPublicRating } from './mangaStats';
+import { getFavoriteEpisodes } from './episodeHelpers';
+
+const getStarredEpisodeCount = (item) => getFavoriteEpisodes(item).length;
+
+const compareByTitle = (a, b) =>
+  (a.title || '').localeCompare(b.title || '', 'pt-BR', { sensitivity: 'base' });
+
+const arePersonallyTied = (a, b, tieBreakByFavoriteEpisodes) => {
+  if (a.rating !== b.rating) return false;
+  if (
+    tieBreakByFavoriteEpisodes &&
+    getStarredEpisodeCount(a) !== getStarredEpisodeCount(b)
+  ) {
+    return false;
+  }
+  return true;
+};
 
 export const RANKING_PERSONAL = 'personal';
 export const RANKING_PUBLIC = 'public';
@@ -10,18 +27,32 @@ export const LOAD_MORE_COUNT = 10;
 
 /**
  * Atribui colocações com empate (competition ranking) por nota pessoal.
+ * @param {object[]} items
+ * @param {{ tieBreakByFavoriteEpisodes?: boolean }} options
  */
-export const assignPersonalRanks = (items) => {
+export const assignPersonalRanks = (items, options = {}) => {
+  const { tieBreakByFavoriteEpisodes = false } = options;
+
   const rated = items
     .filter((item) => item.rating > 0)
-    .sort((a, b) => b.rating - a.rating);
+    .sort((a, b) => {
+      const ratingDiff = b.rating - a.rating;
+      if (ratingDiff !== 0) return ratingDiff;
+
+      if (tieBreakByFavoriteEpisodes) {
+        const starDiff = getStarredEpisodeCount(b) - getStarredEpisodeCount(a);
+        if (starDiff !== 0) return starDiff;
+      }
+
+      return compareByTitle(a, b);
+    });
 
   const result = [];
   for (let i = 0; i < rated.length; i++) {
     let rank;
     if (i === 0) {
       rank = 1;
-    } else if (rated[i].rating < rated[i - 1].rating) {
+    } else if (!arePersonallyTied(rated[i], rated[i - 1], tieBreakByFavoriteEpisodes)) {
       rank = i + 1;
     } else {
       rank = result[i - 1].rank;

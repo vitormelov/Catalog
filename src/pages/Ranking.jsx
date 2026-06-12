@@ -145,7 +145,9 @@ const Ranking = () => {
 
   const personalRanked = useMemo(() => {
     const source = mediaType === 'manga' ? mangas : animes;
-    return assignPersonalRanks(source);
+    return assignPersonalRanks(source, {
+      tieBreakByFavoriteEpisodes: mediaType === 'anime',
+    });
   }, [mangas, animes, mediaType]);
 
   const rankedItems =
