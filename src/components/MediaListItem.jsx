@@ -29,6 +29,8 @@ const MediaListItem = ({
   const title = item.title || '';
   const titleEnglish = item.title_english || item.titleEnglish || '';
   const score = formatPublicRating(item.score);
+  const rank = item.rank != null ? `#${item.rank}` : '—';
+  const popularity = item.popularity != null ? `#${item.popularity}` : '—';
 
   const countLabel = isManga
     ? [
@@ -66,6 +68,14 @@ const MediaListItem = ({
       <div className="media-list-score" data-label="Nota">
         <span className="media-list-mobile-label">Nota</span>
         {score != null ? score : '—'}
+      </div>
+      <div className="media-list-rank" data-label="Ranking">
+        <span className="media-list-mobile-label">Ranking</span>
+        {rank}
+      </div>
+      <div className="media-list-popularity" data-label="Popularidade">
+        <span className="media-list-mobile-label">Popularidade</span>
+        {popularity}
       </div>
       <div className="media-list-date" data-label="Início">
         <span className="media-list-mobile-label">Início</span>

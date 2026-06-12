@@ -10,10 +10,10 @@
 .anime-library-header,
 .anime-library-item {
   display: grid;
-  grid-template-columns: 80px 1fr 130px 130px 100px 100px 88px;
+  grid-template-columns: 80px 1fr 80px 130px 130px 100px 100px 88px;
   gap: 1rem;
   align-items: center;
-  min-width: 820px;
+  min-width: 900px;
 }
 
 .anime-library-header {
@@ -80,6 +80,7 @@
   overflow: hidden;
 }
 
+.anime-library-episodes,
 .anime-library-ratings,
 .anime-library-status,
 .anime-library-date {
@@ -169,7 +170,7 @@
   }
 
   .anime-library-image {
-    grid-row: 1 / 6;
+    grid-row: 1 / 7;
     width: 70px;
     height: 100px;
   }

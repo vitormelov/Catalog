@@ -113,3 +113,60 @@ export const getPopularAnime = async () => {
   }
 };
 
+const fetchPaginated = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Erro ao buscar dados');
+  }
+  const data = await response.json();
+  return {
+    items: data.data || [],
+    hasNext: Boolean(data.pagination?.has_next_page),
+    currentPage: data.pagination?.current_page || 1,
+  };
+};
+
+/**
+ * Busca página do ranking público de mangás
+ * @param {number} page
+ * @param {'score'|'popularity'} sortBy
+ */
+export const getTopMangaPage = async (page = 1, sortBy = 'popularity') => {
+  const limit = 25;
+  const url =
+    sortBy === 'score'
+      ? `${JIKAN_API_BASE}/manga?order_by=score&sort=desc&limit=${limit}&page=${page}`
+      : `${JIKAN_API_BASE}/top/manga?limit=${limit}&page=${page}`;
+  return fetchPaginated(url);
+};
+
+/**
+ * Busca página do ranking público de animes
+ */
+export const getTopAnimePage = async (page = 1, sortBy = 'popularity') => {
+  const limit = 25;
+  const url =
+    sortBy === 'score'
+      ? `${JIKAN_API_BASE}/anime?order_by=score&sort=desc&limit=${limit}&page=${page}`
+      : `${JIKAN_API_BASE}/top/anime?limit=${limit}&page=${page}`;
+  return fetchPaginated(url);
+};
+
+/**
+ * Busca mangás por título com paginação
+ */
+export const searchMangaPage = async (query, page = 1) => {
+  const limit = 25;
+  const url = `${JIKAN_API_BASE}/manga?q=${encodeURIComponent(query)}&limit=${limit}&page=${page}`;
+  return fetchPaginated(url);
+};
+
+/**
+ * Busca animes por título com paginação
+ */
+export const searchAnimePage = async (query, page = 1) => {
+  const limit = 25;
+  const url = `${JIKAN_API_BASE}/anime?q=${encodeURIComponent(query)}&limit=${limit}&page=${page}`;
+  return fetchPaginated(url);
+};
+

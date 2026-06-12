@@ -50,4 +50,6 @@ export const jikanAnimeToLibrary = (item) => ({
   watchStatus: 'querendo_assistir',
   startedAt: null,
   finishedAt: null,
+  totalEpisodes: item.episodes ?? null,
+  favoriteEpisodes: [],
 });

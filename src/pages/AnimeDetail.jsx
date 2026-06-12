@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -6,6 +6,12 @@ import {
   updateAnimeInCollection,
 } from '../services/firestoreService';
 import { WATCH_STATUSES, formatDisplayDate, formatPublicRating } from '../utils/animeStats';
+import {
+  getTotalEpisodes,
+  getFavoriteEpisodes,
+  isFavoriteEpisode,
+  toggleFavoriteEpisode,
+} from '../utils/episodeHelpers';
 import './MangaDetail.css';
 import './AnimeDetail.css';
 
@@ -21,6 +27,9 @@ const AnimeDetail = () => {
   const [finishedAt, setFinishedAt] = useState('');
   const [savingRating, setSavingRating] = useState(false);
   const [savingTracking, setSavingTracking] = useState(false);
+  const [totalEpisodesInput, setTotalEpisodesInput] = useState('');
+  const [editingTotalEpisodes, setEditingTotalEpisodes] = useState(false);
+  const [savingFavorite, setSavingFavorite] = useState(null);
 
   useEffect(() => {
     if (currentUser && id) {
@@ -44,6 +53,9 @@ const AnimeDetail = () => {
       setWatchStatus(data.watchStatus || 'querendo_assistir');
       setStartedAt(data.startedAt || '');
       setFinishedAt(data.finishedAt || '');
+      const total = getTotalEpisodes(data);
+      setTotalEpisodesInput(total ? String(total) : '');
+      setEditingTotalEpisodes(!total);
     } catch (error) {
       console.error('Erro ao carregar anime:', error);
       navigate('/my-animes');
@@ -51,6 +63,12 @@ const AnimeDetail = () => {
       setLoading(false);
     }
   };
+
+  const totalEpisodes = anime ? getTotalEpisodes(anime) : null;
+  const favoriteEpisodes = useMemo(
+    () => (anime ? getFavoriteEpisodes(anime) : []),
+    [anime]
+  );
 
   const handleSaveRating = async () => {
     if (!rating) {
@@ -76,6 +94,42 @@ const AnimeDetail = () => {
       alert('Erro ao salvar nota.');
     } finally {
       setSavingRating(false);
+    }
+  };
+
+  const handleSaveTotalEpisodes = async () => {
+    const parsed = parseInt(totalEpisodesInput, 10);
+    if (Number.isNaN(parsed) || parsed < 1) {
+      alert('Informe um número válido de episódios (mínimo 1).');
+      return;
+    }
+
+    try {
+      await updateAnimeInCollection(anime.id, currentUser.uid, { totalEpisodes: parsed });
+      setAnime((prev) => ({ ...prev, totalEpisodes: parsed }));
+      setEditingTotalEpisodes(false);
+    } catch (error) {
+      console.error('Erro ao salvar total de episódios:', error);
+      alert('Erro ao salvar. Tente novamente.');
+    }
+  };
+
+  const handleToggleFavorite = async (episodeNumber) => {
+    if (savingFavorite != null) return;
+
+    const updated = toggleFavoriteEpisode(anime.favoriteEpisodes, episodeNumber);
+    setSavingFavorite(episodeNumber);
+
+    try {
+      await updateAnimeInCollection(anime.id, currentUser.uid, {
+        favoriteEpisodes: updated,
+      });
+      setAnime((prev) => ({ ...prev, favoriteEpisodes: updated }));
+    } catch (error) {
+      console.error('Erro ao salvar episódio favorito:', error);
+      alert('Erro ao salvar. Tente novamente.');
+    } finally {
+      setSavingFavorite(null);
     }
   };
 
@@ -129,8 +183,8 @@ const AnimeDetail = () => {
           {anime.titleEnglish && anime.titleEnglish !== anime.title && (
             <p className="anime-detail-subtitle">{anime.titleEnglish}</p>
           )}
-          {anime.episodes != null && (
-            <p className="anime-episodes-info">{anime.episodes} episódios</p>
+          {totalEpisodes != null && (
+            <p className="anime-episodes-info">{totalEpisodes} episódios</p>
           )}
 
           <div className="ratings-comparison">
@@ -165,6 +219,16 @@ const AnimeDetail = () => {
               </div>
             </div>
           </div>
+
+          {favoriteEpisodes.length > 0 && (
+            <div className="anime-detail-stats">
+              <span>
+                {favoriteEpisodes.length} episódio
+                {favoriteEpisodes.length !== 1 ? 's' : ''} favorito
+                {favoriteEpisodes.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -228,6 +292,99 @@ const AnimeDetail = () => {
             {savingTracking ? 'Salvando...' : 'Salvar acompanhamento'}
           </button>
         </div>
+      </section>
+
+      <section className="volumes-section episodes-section">
+        <div className="volumes-section-header">
+          <h2>Meus Episódios</h2>
+          {totalEpisodes && !editingTotalEpisodes ? (
+            <div className="total-volumes-display">
+              <span>
+                {favoriteEpisodes.length} / {totalEpisodes} com estrela
+              </span>
+              <button
+                type="button"
+                className="btn-edit-total"
+                onClick={() => setEditingTotalEpisodes(true)}
+              >
+                Editar total
+              </button>
+            </div>
+          ) : (
+            <div className="total-volumes-edit">
+              <label>Total de episódios:</label>
+              <input
+                type="number"
+                min="1"
+                value={totalEpisodesInput}
+                onChange={(e) => setTotalEpisodesInput(e.target.value)}
+                placeholder="Ex: 24"
+              />
+              <button
+                type="button"
+                onClick={handleSaveTotalEpisodes}
+                className="btn-save-total"
+              >
+                {totalEpisodes ? 'Salvar' : 'Definir'}
+              </button>
+              {totalEpisodes && (
+                <button
+                  type="button"
+                  className="btn-cancel-edit"
+                  onClick={() => {
+                    setEditingTotalEpisodes(false);
+                    setTotalEpisodesInput(String(totalEpisodes));
+                  }}
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {!totalEpisodes ? (
+          <p className="volumes-hint">
+            Defina o total de episódios acima para marcar os seus favoritos com estrela.
+          </p>
+        ) : (
+          <>
+            <p className="episodes-hint">
+              Clique em um episódio para marcar ou desmarcar com estrela.
+            </p>
+            <div className="episode-grid">
+              {Array.from({ length: totalEpisodes }, (_, i) => i + 1).map((num) => {
+                const favorited = isFavoriteEpisode(anime.favoriteEpisodes, num);
+                return (
+                  <button
+                    key={num}
+                    type="button"
+                    className={`episode-cell ${favorited ? 'favorited' : ''}`}
+                    onClick={() => handleToggleFavorite(num)}
+                    disabled={savingFavorite === num}
+                    title={
+                      favorited
+                        ? `Ep. ${num} — favorito`
+                        : `Marcar episódio ${num} como favorito`
+                    }
+                  >
+                    <span className="episode-cell-number">{num}</span>
+                    {favorited && <span className="episode-cell-star" aria-hidden="true">★</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            {favoriteEpisodes.length > 0 && (
+              <div className="favorite-episodes-list">
+                <h3>Episódios favoritos</h3>
+                <p className="favorite-episodes-summary">
+                  {favoriteEpisodes.map((num) => `Ep. ${num}`).join(' · ')}
+                </p>
+              </div>
+            )}
+          </>
+        )}
       </section>
     </div>
   );

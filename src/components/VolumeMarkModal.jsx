@@ -132,7 +132,7 @@ const VolumeMarkModal = ({ manga, volumeNumber, existingVolume = null, onClose, 
                 Cancelar
               </button>
               <button type="submit" className="btn-save">
-                {isEditMode ? 'Salvar' : 'Marcar como possuído'}
+                {isEditMode ? 'Salvar' : 'Marcar como adquirido'}
               </button>
             </div>
           </div>

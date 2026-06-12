@@ -143,6 +143,8 @@ const Home = () => {
             <span>Nome</span>
             <span>{type === 'manga' ? 'Volumes/Cap.' : 'Episódios'}</span>
             <span>Nota</span>
+            <span>Ranking</span>
+            <span>Pop.</span>
             <span>Início</span>
             <span>Término</span>
             <span></span>

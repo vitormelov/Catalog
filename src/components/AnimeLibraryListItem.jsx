@@ -2,6 +2,7 @@ import {
   formatRating,
   formatPublicRating,
   formatDisplayDate,
+  formatEpisodesCount,
   getWatchStatusLabel,
 } from '../utils/animeStats';
 import { IconEye, IconTrash } from './Icons';
@@ -25,6 +26,10 @@ const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => 
         {titleEnglish && titleEnglish !== title && (
           <p className="anime-library-subtitle">{titleEnglish}</p>
         )}
+      </div>
+      <div className="anime-library-episodes">
+        <span className="anime-library-mobile-label">Episódios</span>
+        {formatEpisodesCount(anime)}
       </div>
       <div className="anime-library-ratings">
         <span className="anime-library-mobile-label">Notas</span>

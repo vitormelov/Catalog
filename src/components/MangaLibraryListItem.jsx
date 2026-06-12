@@ -3,6 +3,8 @@ import {
   formatPublicRating,
   formatVolumesOwned,
   getMangaCollectionCost,
+  isMangaCollectionComplete,
+  getMangaCollectionStatusLabel,
 } from '../utils/mangaStats';
 import { IconEye, IconTrash } from './Icons';
 import './MangaLibraryListItem.css';
@@ -14,6 +16,8 @@ const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => 
   const publicRating = formatPublicRating(manga.score);
   const personalRating = formatRating(manga.rating);
   const cost = getMangaCollectionCost(manga);
+  const isComplete = isMangaCollectionComplete(manga);
+  const statusLabel = getMangaCollectionStatusLabel(manga);
 
   return (
     <div className="manga-library-item">
@@ -29,6 +33,14 @@ const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => 
       <div className="manga-library-volumes">
         <span className="manga-library-mobile-label">Volumes</span>
         <span className="volumes-owned">{formatVolumesOwned(manga)}</span>
+      </div>
+      <div className="manga-library-status">
+        <span className="manga-library-mobile-label">Situação</span>
+        <span
+          className={`manga-status-badge ${isComplete ? 'manga-status-complete' : 'manga-status-incomplete'}`}
+        >
+          {statusLabel}
+        </span>
       </div>
       <div className="manga-library-ratings">
         <span className="manga-library-mobile-label">Notas</span>

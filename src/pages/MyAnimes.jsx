@@ -146,6 +146,7 @@ const MyAnimes = () => {
             <div className="anime-library-header">
               <span></span>
               <span>Nome</span>
+              <span>Episódios</span>
               <span>Notas</span>
               <span>Situação</span>
               <span>Início</span>

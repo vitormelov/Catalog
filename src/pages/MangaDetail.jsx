@@ -204,7 +204,7 @@ const MangaDetail = () => {
 
           {sortedOwnedVolumes.length > 0 && (
             <div className="manga-detail-stats">
-              <span>{sortedOwnedVolumes.length} volume{sortedOwnedVolumes.length !== 1 ? 's' : ''} possuído{sortedOwnedVolumes.length !== 1 ? 's' : ''}</span>
+              <span>{sortedOwnedVolumes.length} volume{sortedOwnedVolumes.length !== 1 ? 's' : ''} adquirido{sortedOwnedVolumes.length !== 1 ? 's' : ''}</span>
               {totalSpent > 0 && (
                 <span>Total investido: <strong>R$ {totalSpent.toFixed(2)}</strong></span>
               )}
@@ -286,7 +286,7 @@ const MangaDetail = () => {
 
             {sortedOwnedVolumes.length > 0 && (
               <div className="owned-volumes-list">
-                <h3>Detalhes dos volumes possuídos</h3>
+                <h3>Detalhes dos volumes adquiridos</h3>
                 {sortedOwnedVolumes.map((vol) => {
                     const normalized = normalizeVolume(vol);
                     return (

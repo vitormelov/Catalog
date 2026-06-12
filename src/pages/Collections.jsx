@@ -35,7 +35,7 @@ const Collections = () => {
           const totalCost = await getCollectionTotalCost(col.id, currentUser.uid);
           const mangas = await getMangaByCollection(col.id, currentUser.uid);
           
-          // Calcular quantidade de volumes possuídos
+          // Calcular quantidade de volumes adquiridos
           let volumesCount = 0;
           mangas.forEach((manga) => {
             const volumes = manga.volumes || [];

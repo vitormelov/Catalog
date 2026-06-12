@@ -46,11 +46,90 @@
   font-size: 0.95rem;
 }
 
+.anime-detail-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+.episodes-hint {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.episode-cell {
+  aspect-ratio: 1;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  position: relative;
+  padding: 0.25rem;
+}
+
+.episode-cell:hover:not(:disabled) {
+  border-color: var(--color-gold);
+  background: #fffbeb;
+  transform: scale(1.05);
+}
+
+.episode-cell:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.episode-cell.favorited {
+  background: var(--color-ink);
+  border-color: var(--color-gold);
+  color: white;
+}
+
+.episode-cell-number {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.episode-cell-star {
+  font-size: 0.75rem;
+  margin-top: 0.1rem;
+  color: var(--color-gold);
+}
+
+.favorite-episodes-list h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.favorite-episodes-summary {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+}
+
 .tracking-section {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
 }
 
 .tracking-section h2 {

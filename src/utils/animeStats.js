@@ -1,6 +1,13 @@
 import { formatRating, formatPublicRating } from './mangaStats';
+import { getTotalEpisodes } from './episodeHelpers';
 
 export { formatRating, formatPublicRating };
+
+export const formatEpisodesCount = (anime) => {
+  const total = getTotalEpisodes(anime);
+  if (total == null) return '—';
+  return `${total} ep.`;
+};
 
 export const WATCH_STATUSES = [
   { value: 'assistindo', label: 'Assistindo' },

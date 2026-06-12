@@ -89,3 +89,48 @@
   border-color: transparent;
   color: white;
 }
+
+.library-stats-banner {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.library-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  min-width: 100px;
+  gap: 0.35rem;
+}
+
+.library-stat-label {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.library-stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text);
+  font-family: var(--font-display);
+}
+
+.library-stat-value.investment {
+  color: var(--color-success);
+}

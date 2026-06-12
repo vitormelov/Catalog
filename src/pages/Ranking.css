@@ -20,17 +20,109 @@
   font-size: 1.05rem;
 }
 
-.ranking-type-toggle {
+.ranking-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.ranking-source-toggle {
   display: flex;
   justify-content: center;
   gap: 0;
-  margin-bottom: 2.5rem;
   border-radius: 10px;
   overflow: hidden;
   border: 2px solid #e8e8e8;
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  flex-shrink: 0;
+}
+
+.ranking-source-toggle .source-btn {
+  padding: 0.7rem 1.75rem;
+  border: none;
+  background: white;
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ranking-source-toggle .source-btn:not(:last-child) {
+  border-right: 1px solid #e8e8e8;
+}
+
+.ranking-source-toggle .source-btn.active {
+  background: var(--color-secondary);
+  color: white;
+}
+
+.ranking-source-toggle .source-btn:hover:not(.active) {
+  background: var(--color-accent-soft);
+}
+
+.ranking-sort-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #e8e8e8;
+  width: fit-content;
+  flex-shrink: 0;
+}
+
+.ranking-sort-toggle .sort-btn {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  background: white;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ranking-sort-toggle .sort-btn:not(:last-child) {
+  border-right: 1px solid #e8e8e8;
+}
+
+.ranking-sort-toggle .sort-btn.active {
+  background: var(--color-accent);
+  color: white;
+}
+
+.ranking-sort-toggle .sort-btn:hover:not(.active) {
+  background: var(--color-accent-soft);
+}
+
+.ranking-loading-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+  font-size: 1.05rem;
+}
+
+.ranking-load-more {
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  color: #888;
+  font-size: 0.95rem;
+  min-height: 60px;
+}
+
+.ranking-type-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #e8e8e8;
+  width: fit-content;
+  flex-shrink: 0;
 }
 
 .ranking-type-toggle .type-btn {

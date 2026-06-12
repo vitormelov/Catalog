@@ -31,21 +31,51 @@ export const formatVolumesOwned = (manga) => {
 
 export const SORT_ALPHA = 'alpha';
 export const SORT_RATING = 'rating';
+export const SORT_STATUS = 'status';
+export const SORT_COST = 'cost';
+
+export const isMangaCollectionComplete = (manga) => {
+  const total = manga.totalVolumes;
+  if (total == null || total <= 0) return false;
+  return getOwnedVolumesCount(manga) >= total;
+};
+
+export const getMangaCollectionStatusLabel = (manga) =>
+  isMangaCollectionComplete(manga) ? 'Completo' : 'Incompleto';
 
 export const sortMangas = (mangas, sortBy) => {
   const copy = [...mangas];
+  const byTitle = (a, b) =>
+    (a.title || '').localeCompare(b.title || '', 'pt-BR', { sensitivity: 'base' });
 
   if (sortBy === SORT_ALPHA) {
-    return copy.sort((a, b) =>
-      (a.title || '').localeCompare(b.title || '', 'pt-BR', { sensitivity: 'base' })
-    );
+    return copy.sort(byTitle);
   }
 
   if (sortBy === SORT_RATING) {
     return copy.sort((a, b) => {
       const ratingA = a.rating > 0 ? a.rating : -1;
       const ratingB = b.rating > 0 ? b.rating : -1;
-      return ratingB - ratingA;
+      if (ratingB !== ratingA) return ratingB - ratingA;
+      return byTitle(a, b);
+    });
+  }
+
+  if (sortBy === SORT_STATUS) {
+    return copy.sort((a, b) => {
+      const completeA = isMangaCollectionComplete(a) ? 0 : 1;
+      const completeB = isMangaCollectionComplete(b) ? 0 : 1;
+      if (completeA !== completeB) return completeA - completeB;
+      return byTitle(a, b);
+    });
+  }
+
+  if (sortBy === SORT_COST) {
+    return copy.sort((a, b) => {
+      const costA = getMangaCollectionCost(a);
+      const costB = getMangaCollectionCost(b);
+      if (costB !== costA) return costB - costA;
+      return byTitle(a, b);
     });
   }
 

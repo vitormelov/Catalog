@@ -11,6 +11,8 @@ import {
   sortMangas,
   SORT_ALPHA,
   SORT_RATING,
+  SORT_STATUS,
+  SORT_COST,
 } from '../utils/mangaStats';
 import MangaLibraryListItem from '../components/MangaLibraryListItem';
 import './MyLibrary.css';
@@ -97,7 +99,7 @@ const MyMangas = () => {
               <span className="library-stat-value">{mangas.length}</span>
             </div>
             <div className="library-stat">
-              <span className="library-stat-label">Volumes possuídos</span>
+              <span className="library-stat-label">Volumes adquiridos</span>
               <span className="library-stat-value">{stats.totalOwnedVolumes}</span>
             </div>
             <div className="library-stat">
@@ -125,6 +127,20 @@ const MyMangas = () => {
               >
                 Minha nota
               </button>
+              <button
+                type="button"
+                className={`sort-btn ${sortBy === SORT_STATUS ? 'active' : ''}`}
+                onClick={() => setSortBy(SORT_STATUS)}
+              >
+                Situação
+              </button>
+              <button
+                type="button"
+                className={`sort-btn ${sortBy === SORT_COST ? 'active' : ''}`}
+                onClick={() => setSortBy(SORT_COST)}
+              >
+                Custo
+              </button>
             </div>
           </div>
 
@@ -133,6 +149,7 @@ const MyMangas = () => {
               <span></span>
               <span>Nome</span>
               <span>Volumes</span>
+              <span>Situação</span>
               <span>Notas</span>
               <span>Custo</span>
               <span></span>
@@ -149,6 +166,7 @@ const MyMangas = () => {
             <div className="manga-library-total-row">
               <span></span>
               <span className="total-label">Custo total da coleção</span>
+              <span></span>
               <span></span>
               <span></span>
               <span className="total-cost">R$ {stats.totalCost.toFixed(2)}</span>

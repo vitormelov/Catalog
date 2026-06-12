@@ -128,7 +128,7 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
       <div className="volumes-details">
         <div className="volumes-header">
           <div className="volumes-title">
-            <h4>Volumes Possuídos ({volumes.length})</h4>
+            <h4>Volumes Adquiridos ({volumes.length})</h4>
             {totalSpent > 0 && (
               <div className="total-spent">
                 Total Gasto: <strong>R$ {totalSpent.toFixed(2)}</strong>

@@ -9,7 +9,7 @@
 
 .manga-library-header {
   display: grid;
-  grid-template-columns: 80px 1fr 100px 130px 100px 88px;
+  grid-template-columns: 80px 1fr 100px 110px 130px 100px 88px;
   gap: 1rem;
   padding: 0.75rem 1.25rem;
   background: var(--color-ink);
@@ -19,18 +19,18 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  min-width: 700px;
+  min-width: 820px;
 }
 
 .manga-library-item {
   display: grid;
-  grid-template-columns: 80px 1fr 100px 130px 100px 88px;
+  grid-template-columns: 80px 1fr 100px 110px 130px 100px 88px;
   gap: 1rem;
   align-items: center;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid #eee;
   transition: background 0.2s;
-  min-width: 700px;
+  min-width: 820px;
 }
 
 .manga-library-item:last-child {
@@ -43,14 +43,14 @@
 
 .manga-library-total-row {
   display: grid;
-  grid-template-columns: 80px 1fr 100px 130px 100px 88px;
+  grid-template-columns: 80px 1fr 100px 110px 130px 100px 88px;
   gap: 1rem;
   align-items: center;
   padding: 1rem 1.25rem;
   background: var(--color-accent-soft);
   border-top: 3px solid var(--color-accent);
   font-weight: 600;
-  min-width: 700px;
+  min-width: 820px;
 }
 
 .manga-library-total-row .total-label {
@@ -104,9 +104,29 @@
 }
 
 .manga-library-volumes,
+.manga-library-status,
 .manga-library-ratings,
 .manga-library-cost {
   font-size: 0.9rem;
+}
+
+.manga-status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.manga-status-complete {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.manga-status-incomplete {
+  background: var(--color-accent-soft);
+  color: var(--color-secondary);
 }
 
 .volumes-owned {
@@ -157,41 +177,6 @@
   display: none;
 }
 
-.library-stats-banner {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  background: white;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-.library-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.library-stat-label {
-  font-size: 0.8rem;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  font-weight: 600;
-}
-
-.library-stat-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #333;
-}
-
-.library-stat-value.investment {
-  color: var(--color-success);
-}
-
 @media (max-width: 900px) {
   .manga-library-header,
   .manga-library-total-row {
@@ -215,6 +200,7 @@
   }
 
   .manga-library-volumes,
+  .manga-library-status,
   .manga-library-ratings,
   .manga-library-cost {
     grid-column: 2;
