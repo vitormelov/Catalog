@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import LogoMark from '../components/LogoMark';
 import './Auth.css';
 
 const Signup = () => {
@@ -40,7 +41,10 @@ const Signup = () => {
 
   return (
     <div className="auth-container">
-      <h1 className="auth-title">CATALOG</h1>
+      <div className="auth-brand">
+        <LogoMark className="auth-brand-mark" />
+        <h1 className="auth-title">Trackeando</h1>
+      </div>
       <div className="auth-card">
         <h2>Cadastrar</h2>
         {error && <div className="error-message">{error}</div>}

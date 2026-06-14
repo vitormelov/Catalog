@@ -1,6 +1,7 @@
 // Layout principal da aplicação
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import LogoMark from './LogoMark';
 import './Layout.css';
 
 const Layout = ({ children }) => {
@@ -24,7 +25,8 @@ const Layout = ({ children }) => {
         <header className="header">
           <div className="header-content">
             <Link to="/" className="logo">
-              CATALOG
+              <LogoMark className="logo-mark" />
+              <span className="logo-text">Trackeando</span>
             </Link>
             <nav className="nav">
               <Link to="/">Home</Link>

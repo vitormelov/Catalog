@@ -1,6 +1,6 @@
-# 📚 Minha Coleção de Mangás
+# Trackeando
 
-Uma aplicação web moderna para gerenciar sua coleção de mangás, desenvolvida com React e Firebase.
+Uma aplicação web moderna para gerenciar sua coleção de mangás e animes, desenvolvida com React e Firebase.
 
 ## 🚀 Funcionalidades
 

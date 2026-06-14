@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Trackeando">
+  <defs>
+    <style>
+      @font-face {
+        font-family: 'Bebas Neue';
+        src: url('/bebas-neue.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+      }
+    </style>
+  </defs>
+  <circle cx="16" cy="16" r="16" fill="#061A3F"/>
+  <circle
+    cx="16"
+    cy="16"
+    r="12.5"
+    fill="none"
+    stroke="rgba(241, 242, 241, 0.18)"
+    stroke-width="2.5"
+  />
+  <circle
+    cx="16"
+    cy="16"
+    r="12.5"
+    fill="none"
+    stroke="#0BC0EF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-dasharray="59 19.5"
+  />
+  <text
+    x="16"
+    y="20.5"
+    text-anchor="middle"
+    font-family="'Bebas Neue', sans-serif"
+    font-size="13"
+    fill="#F1F2F1"
+  >T</text>
+</svg>

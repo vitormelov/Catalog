@@ -18,6 +18,7 @@ import {
   jikanAnimeToLibrary,
 } from '../utils/mediaHelpers';
 import MediaListItem from '../components/MediaListItem';
+import LogoMark from '../components/LogoMark';
 import './Home.css';
 
 const Home = () => {
@@ -182,7 +183,10 @@ const Home = () => {
         </video>
         <div className="video-overlay"></div>
         <div className="welcome-section">
-          <h1>CATALOG</h1>
+          <div className="welcome-brand">
+            <LogoMark className="welcome-brand-mark" />
+            <h1>Trackeando</h1>
+          </div>
           <p>Organize a sua coleção de mangás e animes de maneira rápida e simples.</p>
           <div className="auth-buttons">
             <Link to="/login" className="btn btn-primary">Entrar</Link>

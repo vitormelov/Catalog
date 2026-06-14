@@ -6,9 +6,10 @@
   --palette-cyan: #0BC0EF;
   --palette-light: #F1F2F1;
 
-  /* Tipografia */
-  --font-ui: 'Outfit', system-ui, sans-serif;
-  --font-display: 'DM Serif Display', Georgia, serif;
+  /* Tipografia — UI estilo MAL, títulos app, marca display */
+  --font-ui: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --font-brand: 'Bebas Neue', sans-serif;
 
   /* Superfícies */
   --color-bg: var(--palette-light);

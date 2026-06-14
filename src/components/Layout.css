@@ -30,16 +30,29 @@
 }
 
 .logo {
-  font-family: var(--font-display);
-  font-size: 1.65rem;
-  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   text-decoration: none;
   color: var(--color-text-on-dark);
-  letter-spacing: 0.04em;
   transition: color 0.18s ease;
 }
 
-.logo:hover {
+.logo-mark {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.logo-text {
+  font-family: var(--font-brand);
+  font-size: 1.65rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.logo:hover .logo-text {
   color: var(--color-highlight);
 }
 
