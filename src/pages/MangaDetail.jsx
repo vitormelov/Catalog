@@ -7,6 +7,7 @@ import {
 } from '../services/firestoreService';
 import { getConditionLabel, normalizeVolume } from '../utils/volumeHelpers';
 import { sortVolumesByNumber, formatPublicRating } from '../utils/mangaStats';
+import { formatLocalDate } from '../utils/dateHelpers';
 import VolumeMarkModal from '../components/VolumeMarkModal';
 import './MangaDetail.css';
 
@@ -299,9 +300,7 @@ const MangaDetail = () => {
                           R$ {(normalized.price || 0).toFixed(2)}
                         </span>
                         <span className="owned-vol-date">
-                          {normalized.purchaseDate
-                            ? new Date(normalized.purchaseDate).toLocaleDateString('pt-BR')
-                            : 'Data não informada'}
+                          {formatLocalDate(normalized.purchaseDate, 'Data não informada')}
                         </span>
                         <button
                           type="button"

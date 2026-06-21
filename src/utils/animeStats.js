@@ -1,5 +1,6 @@
 import { formatRating, formatPublicRating } from './mangaStats';
 import { getTotalEpisodes } from './episodeHelpers';
+import { formatLocalDate } from './dateHelpers';
 
 export { formatRating, formatPublicRating };
 
@@ -30,12 +31,7 @@ const STATUS_SORT_ORDER = {
 export const getWatchStatusLabel = (status) =>
   WATCH_STATUSES.find((s) => s.value === status)?.label || '—';
 
-export const formatDisplayDate = (dateString) => {
-  if (!dateString) return '—';
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return '—';
-  return date.toLocaleDateString('pt-BR');
-};
+export const formatDisplayDate = (dateString) => formatLocalDate(dateString);
 
 export const countByWatchStatus = (animes, status) =>
   animes.filter((a) => a.watchStatus === status).length;

@@ -1,4 +1,5 @@
 // Componente para mostrar detalhes do mangá na coleção (com volumes)
+import { formatLocalDate } from '../utils/dateHelpers';
 import './MangaDetails.css';
 
 const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
@@ -60,15 +61,7 @@ const MangaDetails = ({ manga, onAddVolume, onEditVolume, onDeleteVolume }) => {
   };
 
   // Formatar data ou mostrar "indefinido"
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Indefinido';
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('pt-BR');
-    } catch {
-      return 'Indefinido';
-    }
-  };
+  const formatDate = (dateString) => formatLocalDate(dateString, 'Indefinido');
 
   // Formatar data e hora ou mostrar "indefinido"
   const formatDateTime = (dateString) => {

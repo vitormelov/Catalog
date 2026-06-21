@@ -1,13 +1,9 @@
 import { formatPublicRating } from '../utils/mangaStats';
+import { formatLocalDate } from '../utils/dateHelpers';
 import { IconEye, IconTrash, IconPlus } from './Icons';
 import './MediaListItem.css';
 
-const formatDate = (dateString) => {
-  if (!dateString) return '—';
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return '—';
-  return date.toLocaleDateString('pt-BR');
-};
+const formatDate = (dateString) => formatLocalDate(dateString);
 
 const getImageUrl = (item) =>
   item.images?.jpg?.image_url ||
