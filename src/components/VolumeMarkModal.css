@@ -44,3 +44,36 @@
   background: #ef4444;
   color: white;
 }
+
+.raro-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: #fffbeb;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.raro-option input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-gold);
+  cursor: pointer;
+}
+
+.raro-option-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.raro-star {
+  color: var(--color-gold);
+  font-size: 1.1rem;
+  line-height: 1;
+}

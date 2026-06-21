@@ -303,7 +303,14 @@ const MangaDetail = () => {
                     const normalized = normalizeVolume(vol);
                     return (
                       <div key={vol.volumeNumber} className="owned-volume-row">
-                        <span className="owned-vol-num">Vol. {normalized.volumeNumber}</span>
+                        <span className="owned-vol-num">
+                          Vol. {normalized.volumeNumber}
+                          {normalized.raro && (
+                            <span className="owned-vol-rare-star" title="Volume raro" aria-label="Volume raro">
+                              ★
+                            </span>
+                          )}
+                        </span>
                         <span className="owned-vol-condition">
                           {getConditionLabel(normalized.condition)}
                         </span>

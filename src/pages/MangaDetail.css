@@ -306,8 +306,17 @@
 }
 
 .owned-vol-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-weight: 700;
   color: #333;
+}
+
+.owned-vol-rare-star {
+  color: var(--color-gold);
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 .owned-vol-condition {

@@ -15,10 +15,13 @@ export const getVolumeCondition = (volume) => {
 export const getConditionLabel = (condition) =>
   VOLUME_CONDITIONS.find((c) => c.value === condition)?.label || condition;
 
+export const isVolumeRaro = (volume) => Boolean(volume?.raro);
+
 export const normalizeVolume = (vol) => ({
   volumeNumber: Number(vol.volumeNumber),
   condition: getVolumeCondition(vol),
   price: Number(vol.price) || 0,
   purchaseDate: vol.purchaseDate || null,
   lastUpdated: vol.lastUpdated || null,
+  raro: Boolean(vol.raro),
 });

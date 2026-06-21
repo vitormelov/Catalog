@@ -13,6 +13,7 @@ const formatPriceForInput = (value) => {
 const VolumeMarkModal = ({ manga, volumeNumber, existingVolume = null, onClose, onSave, onRemove }) => {
   const isEditMode = Boolean(existingVolume);
   const [formData, setFormData] = useState({
+    raro: false,
     condition: 'lacrado',
     price: '',
     purchaseDate: '',
@@ -21,6 +22,7 @@ const VolumeMarkModal = ({ manga, volumeNumber, existingVolume = null, onClose, 
   useEffect(() => {
     if (existingVolume) {
       setFormData({
+        raro: Boolean(existingVolume.raro),
         condition: getVolumeCondition(existingVolume),
         price: formatPriceForInput(existingVolume.price),
         purchaseDate: existingVolume.purchaseDate || '',
@@ -51,6 +53,7 @@ const VolumeMarkModal = ({ manga, volumeNumber, existingVolume = null, onClose, 
 
     onSave({
       volumeNumber,
+      raro: formData.raro,
       condition: formData.condition,
       price: parsedPrice,
       purchaseDate: formData.purchaseDate || null,
@@ -120,6 +123,18 @@ const VolumeMarkModal = ({ manga, volumeNumber, existingVolume = null, onClose, 
               ))}
             </select>
           </div>
+
+          <label className="raro-option">
+            <input
+              type="checkbox"
+              checked={formData.raro}
+              onChange={(e) => handleChange('raro', e.target.checked)}
+            />
+            <span className="raro-option-label">
+              <span className="raro-star" aria-hidden="true">★</span>
+              Volume raro
+            </span>
+          </label>
 
           <div className="modal-actions">
             {isEditMode && onRemove && (
