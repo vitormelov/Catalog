@@ -7,7 +7,7 @@ import {
 } from '../services/firestoreService';
 import { getConditionLabel, normalizeVolume } from '../utils/volumeHelpers';
 import { sortVolumesByNumber, formatPublicRating } from '../utils/mangaStats';
-import { formatLocalDate } from '../utils/dateHelpers';
+import { formatLocalDate, formatLocalDateTime } from '../utils/dateHelpers';
 import VolumeMarkModal from '../components/VolumeMarkModal';
 import './MangaDetail.css';
 
@@ -112,7 +112,10 @@ const MangaDetail = () => {
   };
 
   const handleSaveVolume = async (volumeData) => {
-    const sanitized = normalizeVolume(volumeData);
+    const sanitized = {
+      ...normalizeVolume(volumeData),
+      lastUpdated: new Date().toISOString(),
+    };
     const filtered = ownedVolumes.filter(
       (v) => Number(v.volumeNumber) !== sanitized.volumeNumber
     );
@@ -288,6 +291,14 @@ const MangaDetail = () => {
             {sortedOwnedVolumes.length > 0 && (
               <div className="owned-volumes-list">
                 <h3>Detalhes dos volumes adquiridos</h3>
+                <div className="owned-volume-row owned-volume-header">
+                  <span>Volume</span>
+                  <span>Situação</span>
+                  <span>Preço</span>
+                  <span>Aquisição</span>
+                  <span>Atualizado</span>
+                  <span />
+                </div>
                 {sortedOwnedVolumes.map((vol) => {
                     const normalized = normalizeVolume(vol);
                     return (
@@ -300,7 +311,10 @@ const MangaDetail = () => {
                           R$ {(normalized.price || 0).toFixed(2)}
                         </span>
                         <span className="owned-vol-date">
-                          {formatLocalDate(normalized.purchaseDate, 'Data não informada')}
+                          {formatLocalDate(normalized.purchaseDate, '—')}
+                        </span>
+                        <span className="owned-vol-updated">
+                          {formatLocalDateTime(normalized.lastUpdated, '—')}
                         </span>
                         <button
                           type="button"

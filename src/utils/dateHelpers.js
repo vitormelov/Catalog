@@ -20,3 +20,16 @@ export const formatLocalDate = (dateString, fallback = '—') => {
   if (!date) return fallback;
   return date.toLocaleDateString('pt-BR');
 };
+
+export const formatLocalDateTime = (dateString, fallback = '—') => {
+  if (!dateString) return fallback;
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return fallback;
+  return date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};

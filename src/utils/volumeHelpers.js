@@ -20,5 +20,5 @@ export const normalizeVolume = (vol) => ({
   condition: getVolumeCondition(vol),
   price: Number(vol.price) || 0,
   purchaseDate: vol.purchaseDate || null,
-  lastUpdated: vol.lastUpdated || new Date().toISOString(),
+  lastUpdated: vol.lastUpdated || null,
 });

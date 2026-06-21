@@ -283,12 +283,22 @@
 
 .owned-volume-row {
   display: grid;
-  grid-template-columns: 70px 1fr 90px 130px 70px;
+  grid-template-columns: 70px 1fr 90px 110px 140px 70px;
   gap: 0.75rem;
   align-items: center;
   padding: 0.75rem 0;
   border-bottom: 1px solid #eee;
   font-size: 0.9rem;
+}
+
+.owned-volume-header {
+  padding: 0.5rem 0;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #888;
 }
 
 .owned-volume-row:last-child {
@@ -310,7 +320,8 @@
   font-weight: 600;
 }
 
-.owned-vol-date {
+.owned-vol-date,
+.owned-vol-updated {
   color: #888;
   font-size: 0.85rem;
 }
@@ -355,7 +366,12 @@
     gap: 0.35rem;
   }
 
-  .owned-vol-date {
+  .owned-volume-header {
+    display: none;
+  }
+
+  .owned-vol-date,
+  .owned-vol-updated {
     grid-column: 1 / -1;
   }
 }
