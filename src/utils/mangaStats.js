@@ -8,8 +8,9 @@ export const getTotalMangaCollectionCost = (mangas) =>
 
 export const formatRating = (rating) => {
   if (rating === null || rating === undefined || rating === 0) return null;
-  const rounded = Math.round(rating * 2) / 2;
-  return Number.isInteger(rounded) ? rounded.toFixed(0) : rounded.toFixed(1);
+  const numeric = typeof rating === 'number' ? rating : parseFloat(rating);
+  if (Number.isNaN(numeric)) return null;
+  return numeric.toFixed(2);
 };
 
 /** Nota do público (API) — preserva decimais, ex.: 8.09 */

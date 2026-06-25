@@ -9,28 +9,28 @@
 
 .manga-library-header {
   display: grid;
-  grid-template-columns: 80px 1fr 100px 110px 130px 100px 88px;
-  gap: 1rem;
-  padding: 0.75rem 1.25rem;
+  grid-template-columns: 64px 1fr 88px 96px 118px 88px 72px;
+  gap: 0.5rem 0.65rem;
+  padding: 0.55rem 0.75rem;
   background: var(--color-ink);
   color: white;
   border-radius: 10px 10px 0 0;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  min-width: 820px;
+  min-width: 760px;
 }
 
 .manga-library-item {
   display: grid;
-  grid-template-columns: 80px 1fr 100px 110px 130px 100px 88px;
-  gap: 1rem;
+  grid-template-columns: 64px 1fr 88px 96px 118px 88px 72px;
+  gap: 0.5rem 0.65rem;
   align-items: center;
-  padding: 1rem 1.25rem;
+  padding: 0.6rem 0.75rem;
   border-bottom: 1px solid #eee;
   transition: background 0.2s;
-  min-width: 820px;
+  min-width: 760px;
 }
 
 .manga-library-item:last-child {
@@ -42,31 +42,32 @@
 }
 
 .manga-library-total-row {
-  display: grid;
-  grid-template-columns: 80px 1fr 100px 110px 130px 100px 88px;
-  gap: 1rem;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
   background: var(--color-accent-soft);
   border-top: 3px solid var(--color-accent);
   font-weight: 600;
-  min-width: 820px;
+  min-width: 760px;
+  white-space: nowrap;
 }
 
 .manga-library-total-row .total-label {
-  text-align: right;
   color: #1a1a1a;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .manga-library-total-row .total-cost {
   color: var(--color-success);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  flex-shrink: 0;
 }
 
 .manga-library-image {
-  width: 60px;
-  height: 85px;
+  width: 52px;
+  height: 74px;
   border-radius: 6px;
   overflow: hidden;
   background: #f0f0f0;
@@ -84,7 +85,7 @@
 
 .manga-library-title {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.92rem;
   color: #1a1a1a;
   line-height: 1.3;
   display: -webkit-box;
@@ -107,7 +108,7 @@
 .manga-library-status,
 .manga-library-ratings,
 .manga-library-cost {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 
 .manga-status-badge {
@@ -139,6 +140,7 @@
   align-items: baseline;
   gap: 0.2rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .rating-personal {
@@ -165,6 +167,7 @@
 .cost-value {
   font-weight: 600;
   color: var(--color-success);
+  white-space: nowrap;
 }
 
 .manga-library-actions {

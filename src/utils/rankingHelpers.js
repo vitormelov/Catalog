@@ -1,4 +1,4 @@
-import { formatPublicRating } from './mangaStats';
+import { formatPublicRating, formatRating } from './mangaStats';
 import { getFavoriteEpisodes } from './episodeHelpers';
 
 const getStarredEpisodeCount = (item) => getFavoriteEpisodes(item).length;
@@ -132,7 +132,7 @@ export const getRankingDisplayValue = (item, rankingSource, publicSort) => {
   }
   const rating = item.rating;
   if (!rating || rating <= 0) return '—';
-  return Number.isInteger(rating) ? rating.toFixed(0) : rating.toFixed(1);
+  return formatRating(rating) ?? '—';
 };
 
 export const getRankingValueLabel = (rankingSource, publicSort) => {

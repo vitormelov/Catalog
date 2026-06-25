@@ -1,22 +1,12 @@
 // Layout principal da aplicação
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LogoMark from './LogoMark';
+import UserMenu from './UserMenu';
 import './Layout.css';
 
 const Layout = ({ children }) => {
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-    }
-  };
-
+  const { currentUser } = useAuth();
   const isLandingPage = !currentUser;
 
   return (
@@ -33,10 +23,7 @@ const Layout = ({ children }) => {
               <Link to="/my-mangas">Meus Mangás</Link>
               <Link to="/my-animes">Meus Animes</Link>
               <Link to="/ranking">Ranking</Link>
-              <span className="user-email">{currentUser.email}</span>
-              <button onClick={handleLogout} className="logout-btn">
-                Sair
-              </button>
+              <UserMenu />
             </nav>
           </div>
         </header>
@@ -49,4 +36,3 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
-

@@ -1,0 +1,134 @@
+.friend-profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.friend-back-link {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.friend-back-link:hover {
+  color: var(--color-accent-dark);
+}
+
+.friend-profile-header h1 {
+  margin: 0 0 0.35rem;
+  color: var(--color-text);
+}
+
+.friend-profile-subtitle {
+  margin: 0 0 1.5rem;
+  color: var(--color-text-faint);
+}
+
+.friend-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.friend-tab {
+  padding: 0.6rem 1.1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.friend-tab.active {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: white;
+}
+
+.friend-empty-tab {
+  margin: 0;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--color-text-faint);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.friend-ranking-panel {
+  margin-top: 0;
+}
+
+.friend-library-list .friend-library-header,
+.friend-library-list .manga-library-item,
+.friend-library-list .manga-library-total-row {
+  grid-template-columns: 64px 1fr 88px 96px 118px 88px;
+  min-width: 680px;
+}
+
+.friend-library-list--no-cost .friend-library-header,
+.friend-library-list--no-cost .manga-library-item {
+  grid-template-columns: 64px 1fr 88px 96px 118px;
+  min-width: 592px;
+}
+
+.friend-library-list .manga-library-total-row {
+  min-width: 680px;
+}
+
+.friend-library-list.anime-library-list .friend-library-header,
+.friend-library-list.anime-library-list .anime-library-item {
+  grid-template-columns: 64px 1fr 72px 118px 118px 88px 88px;
+  min-width: 760px;
+}
+
+.friend-ranking-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.friend-ranking-type-btn {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.friend-ranking-type-btn:not(:last-child) {
+  border-right: 1px solid var(--color-border);
+}
+
+.friend-ranking-type-btn.active {
+  background: var(--color-accent);
+  color: white;
+}
+
+.friend-ranking-type-btn:hover:not(.active) {
+  background: var(--color-accent-soft);
+}
+
+.friend-ranking .podium {
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  .friend-library-list .friend-library-header {
+    display: none;
+  }
+}

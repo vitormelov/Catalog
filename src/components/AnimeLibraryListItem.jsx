@@ -8,7 +8,7 @@ import {
 import { IconEye, IconTrash } from './Icons';
 import './AnimeLibraryListItem.css';
 
-const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => {
+const AnimeLibraryListItem = ({ anime, onView, onDelete, onRowClick, deleting = false }) => {
   const imageUrl = anime.imageUrl || '/placeholder-manga.jpg';
   const title = anime.title || '';
   const titleEnglish = anime.titleEnglish || '';
@@ -17,7 +17,22 @@ const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => 
   const status = anime.watchStatus || 'querendo_assistir';
 
   return (
-    <div className="anime-library-item">
+    <div
+      className={`anime-library-item ${onRowClick ? 'clickable' : ''}`}
+      onClick={onRowClick || undefined}
+      onKeyDown={
+        onRowClick
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onRowClick();
+              }
+            }
+          : undefined
+      }
+      role={onRowClick ? 'button' : undefined}
+      tabIndex={onRowClick ? 0 : undefined}
+    >
       <div className="anime-library-image">
         <img src={imageUrl} alt={title} />
       </div>
@@ -58,29 +73,35 @@ const AnimeLibraryListItem = ({ anime, onView, onDelete, deleting = false }) => 
         <span className="anime-library-mobile-label">Término</span>
         {formatDisplayDate(anime.finishedAt)}
       </div>
-      <div className="anime-library-actions">
-        {onView && (
-          <button
-            type="button"
-            className="library-btn library-btn-view"
-            onClick={onView}
-            title="Ver detalhes"
-          >
-            <IconEye />
-          </button>
-        )}
-        {onDelete && (
-          <button
-            type="button"
-            className="library-btn library-btn-delete"
-            onClick={onDelete}
-            disabled={deleting}
-            title="Remover da coleção"
-          >
-            <IconTrash />
-          </button>
-        )}
-      </div>
+      {(onView || onDelete) && (
+        <div
+          className="anime-library-actions"
+          onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => event.stopPropagation()}
+        >
+          {onView && (
+            <button
+              type="button"
+              className="library-btn library-btn-view"
+              onClick={onView}
+              title="Ver detalhes"
+            >
+              <IconEye />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              type="button"
+              className="library-btn library-btn-delete"
+              onClick={onDelete}
+              disabled={deleting}
+              title="Remover da coleção"
+            >
+              <IconTrash />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

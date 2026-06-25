@@ -34,34 +34,47 @@ Siga estes passos para configurar o Firebase no seu projeto:
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function para verificar se o documento pertence ao usuário
     function isOwner() {
       return request.auth != null && request.auth.uid == resource.data.userId;
     }
-    
+
     function isCreatingOwner() {
       return request.auth != null && request.auth.uid == request.resource.data.userId;
     }
-    
-    // Regras para coleções
+
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.userId == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /usernames/{usernameId} {
+      allow get: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+    }
+
     match /collections/{collectionId} {
-      // Permitir leitura se o documento pertence ao usuário
       allow read: if request.auth != null && isOwner();
-      // Permitir escrita se o documento pertence ao usuário
       allow update, delete: if request.auth != null && isOwner();
-      // Permitir criação se o userId no documento corresponde ao usuário autenticado
       allow create: if isCreatingOwner();
     }
-    
-    // Regras para grupos (dentro de coleções)
+
     match /groups/{groupId} {
       allow read: if request.auth != null && isOwner();
       allow update, delete: if request.auth != null && isOwner();
       allow create: if isCreatingOwner();
     }
-    
-    // Regras para mangás (dentro de grupos)
+
     match /mangaCollection/{mangaId} {
+      allow read: if request.auth != null && isOwner();
+      allow update, delete: if request.auth != null && isOwner();
+      allow create: if isCreatingOwner();
+    }
+
+    match /animeCollection/{animeId} {
       allow read: if request.auth != null && isOwner();
       allow update, delete: if request.auth != null && isOwner();
       allow create: if isCreatingOwner();

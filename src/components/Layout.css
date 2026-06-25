@@ -77,32 +77,6 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
-.user-email {
-  color: rgba(255, 253, 249, 0.55);
-  font-size: 0.82rem;
-  margin-left: 0.75rem;
-  padding-left: 0.75rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.logout-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: var(--color-text-on-dark);
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.88rem;
-  transition: all 0.18s ease;
-  margin-left: 0.5rem;
-}
-
-.logout-btn:hover {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
 .main-content {
   flex: 1;
   max-width: 1200px;
@@ -132,14 +106,6 @@
   .nav {
     flex-wrap: wrap;
     justify-content: center;
-  }
-
-  .user-email {
-    border-left: none;
-    margin-left: 0;
-    padding-left: 0;
-    width: 100%;
-    text-align: center;
   }
 
   .main-content {
