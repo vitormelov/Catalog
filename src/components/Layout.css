@@ -121,6 +121,14 @@
   position: relative;
 }
 
+.main-content.main-content--full-bleed {
+  padding: 0;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -144,5 +152,9 @@
 
   .main-content {
     padding: 1rem;
+  }
+
+  .main-content.main-content--full-bleed {
+    padding: 0;
   }
 }

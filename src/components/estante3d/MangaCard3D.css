@@ -1,0 +1,197 @@
+.manga-card-3d {
+  --card-3d-border: #9aa0a8;
+  --card-3d-depth: 2px;
+  --card-3d-half: 1px;
+  --card-3d-frame: 6px;
+  --card-3d-frame-bg:
+    linear-gradient(
+      145deg,
+      #f4f6f8 0%,
+      #c8ced6 18%,
+      #8a929c 38%,
+      #e2e6eb 52%,
+      #6a727c 72%,
+      #b4bbc4 88%,
+      #dfe3e8 100%
+    );
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, rgba(11, 192, 239, 0.1) 0%, transparent 55%),
+    #0e141c;
+  touch-action: none;
+  user-select: none;
+}
+
+.manga-card-3d.is-rare {
+  --card-3d-border: #d4a017;
+  --card-3d-frame-bg:
+    linear-gradient(
+      145deg,
+      #fff6d0 0%,
+      #f0d060 16%,
+      #b8860b 34%,
+      #ffe08a 50%,
+      #8a6914 68%,
+      #e8c547 84%,
+      #fff1b0 100%
+    );
+}
+
+.manga-card-3d-stage {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  perspective: 1100px;
+  cursor: grab;
+}
+
+.manga-card-3d-stage:active {
+  cursor: grabbing;
+}
+
+.manga-card-3d-object {
+  position: relative;
+  width: min(240px, 52%);
+  aspect-ratio: 2.5 / 3.5;
+  transform-style: preserve-3d;
+  will-change: transform;
+  container-type: size;
+}
+
+.manga-card-3d-face {
+  position: absolute;
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+}
+
+.manga-card-3d-face--front,
+.manga-card-3d-face--back {
+  inset: 0;
+  padding: var(--card-3d-frame);
+  border: none;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--card-3d-frame-bg);
+  backface-visibility: hidden;
+  display: flex;
+}
+
+.manga-card-3d-face--front {
+  transform: translateZ(var(--card-3d-half));
+}
+
+.manga-card-3d-face--back {
+  transform: rotateY(180deg) translateZ(var(--card-3d-half));
+}
+
+.manga-card-3d-art {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #141820;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+.manga-card-3d.is-rare .manga-card-3d-art {
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 0, 0.5),
+    inset 0 0 0 2px rgba(255, 230, 140, 0.22);
+}
+
+.manga-card-3d-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+}
+
+.manga-card-3d-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  color: #f1f2f1;
+  background: #061a3f;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+/* Arestas finas na mesma família da moldura */
+.manga-card-3d-face--left,
+.manga-card-3d-face--right {
+  top: 0;
+  bottom: 0;
+  width: var(--card-3d-depth);
+  background: var(--card-3d-frame-bg);
+  backface-visibility: hidden;
+}
+
+.manga-card-3d-face--left {
+  left: 0;
+  transform-origin: left center;
+  transform: rotateY(-90deg);
+}
+
+.manga-card-3d-face--right {
+  right: 0;
+  left: auto;
+  transform-origin: right center;
+  transform: rotateY(90deg);
+}
+
+.manga-card-3d-face--top,
+.manga-card-3d-face--bottom {
+  left: 0;
+  right: 0;
+  height: var(--card-3d-depth);
+  background: var(--card-3d-frame-bg);
+  backface-visibility: hidden;
+}
+
+.manga-card-3d-face--top {
+  top: 0;
+  transform-origin: center top;
+  transform: rotateX(90deg);
+}
+
+.manga-card-3d-face--bottom {
+  bottom: 0;
+  top: auto;
+  transform-origin: center bottom;
+  transform: rotateX(-90deg);
+}
+
+.manga-card-3d-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.85rem;
+  margin: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: rgba(200, 212, 232, 0.65);
+  pointer-events: none;
+  z-index: 2;
+}

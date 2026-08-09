@@ -1,0 +1,197 @@
+.manga-examine {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.manga-examine-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 10, 16, 0.82);
+  backdrop-filter: blur(4px);
+}
+
+.manga-examine-frame {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 100%);
+  height: min(640px, 92vh);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #1c2433 0%, #121820 100%);
+  border: 1px solid #2a3448;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.manga-examine-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #2a3448;
+  background: rgba(14, 20, 28, 0.95);
+}
+
+.manga-examine-label {
+  font-family: var(--font-brand);
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  color: #e8c547;
+}
+
+.manga-examine-close {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c8d4e8;
+  background: transparent;
+  border: 1px solid #3a465c;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.manga-examine-close:hover {
+  border-color: #e8c547;
+  color: #e8c547;
+}
+
+.manga-examine-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  min-height: 0;
+}
+
+.manga-examine-stage {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+  border-right: 1px solid #2a3448;
+  overflow: hidden;
+}
+
+.manga-examine-info {
+  padding: 1.25rem 1.35rem;
+  overflow-y: auto;
+  color: #d8e0f0;
+}
+
+.manga-examine-file-id {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a96b0;
+}
+
+.manga-examine-info h2 {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  line-height: 1.2;
+  color: #f2f6ff;
+}
+
+.manga-examine-aka {
+  margin: 0 0 1rem;
+  color: #8a96b0;
+  font-size: 0.9rem;
+}
+
+.manga-examine-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem 1rem;
+  margin: 0 0 1.1rem;
+}
+
+.manga-examine-stats dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6e7c94;
+  margin-bottom: 0.15rem;
+}
+
+.manga-examine-stats dd {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #d8e0f0;
+}
+
+.manga-examine-span {
+  grid-column: 1 / -1;
+}
+
+.manga-examine-desc h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6e7c94;
+}
+
+.manga-examine-desc p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #aeb8cc;
+}
+
+.manga-examine-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.manga-examine-link,
+.manga-examine-remove {
+  padding: 0.55rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.manga-examine-link {
+  background: rgba(232, 197, 71, 0.14);
+  color: #e8c547;
+  border: 1px solid rgba(232, 197, 71, 0.4);
+}
+
+.manga-examine-link:hover {
+  background: rgba(232, 197, 71, 0.22);
+}
+
+.manga-examine-remove {
+  background: transparent;
+  color: #f0a0a0;
+  border: 1px solid rgba(200, 80, 80, 0.45);
+}
+
+.manga-examine-remove:hover {
+  background: rgba(200, 80, 80, 0.12);
+}
+
+@media (max-width: 760px) {
+  .manga-examine-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(260px, 42vh) 1fr;
+  }
+
+  .manga-examine-stage {
+    border-right: none;
+    border-bottom: 1px solid #2a3448;
+  }
+}

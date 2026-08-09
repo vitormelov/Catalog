@@ -25,18 +25,37 @@ export const searchManga = async (query) => {
  * @param {number} mangaId - ID do mangá no MyAnimeList
  * @returns {Promise} Detalhes completos do mangá
  */
-export const getMangaDetails = async (mangaId) => {
-  try {
-    const response = await fetch(`${JIKAN_API_BASE}/manga/${mangaId}`);
-    if (!response.ok) {
-      throw new Error('Erro ao buscar detalhes do mangá');
+export const getMangaDetails = async (mangaId, { retries = 3, delayMs = 900 } = {}) => {
+  let lastError;
+  for (let attempt = 0; attempt < retries; attempt += 1) {
+    try {
+      const response = await fetch(`${JIKAN_API_BASE}/manga/${mangaId}`);
+      if (response.status === 429 || response.status >= 500) {
+        lastError = new Error(`Jikan indisponível (${response.status})`);
+        if (attempt < retries - 1) {
+          await new Promise((resolve) => setTimeout(resolve, delayMs * (attempt + 1)));
+          continue;
+        }
+        throw lastError;
+      }
+      if (!response.ok) {
+        throw new Error('Erro ao buscar detalhes do mangá');
+      }
+      const data = await response.json();
+      if (!data?.data) {
+        throw new Error('Resposta inválida da Jikan');
+      }
+      return data.data;
+    } catch (error) {
+      lastError = error;
+      console.error('Erro ao buscar detalhes do mangá:', error);
+      if (attempt < retries - 1) {
+        await new Promise((resolve) => setTimeout(resolve, delayMs * (attempt + 1)));
+        continue;
+      }
     }
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error('Erro ao buscar detalhes do mangá:', error);
-    throw error;
   }
+  throw lastError || new Error('Erro ao buscar detalhes do mangá');
 };
 
 /**

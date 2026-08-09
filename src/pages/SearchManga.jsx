@@ -53,7 +53,10 @@ const SearchManga = () => {
         synopsis: selectedManga.synopsis,
         chapters: selectedManga.chapters,
         totalVolumes: selectedManga.volumes, // Total de volumes do mangá (da API)
-        score: selectedManga.score,
+        score: selectedManga.score ?? null,
+        rank: selectedManga.rank ?? null,
+        popularity: selectedManga.popularity ?? null,
+        members: selectedManga.members ?? null,
         status: selectedManga.status,
         published: selectedManga.published,
         rating: 0,

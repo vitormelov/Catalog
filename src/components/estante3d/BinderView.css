@@ -1,0 +1,468 @@
+.binder-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 220, 160, 0.2) 0%, transparent 50%),
+    linear-gradient(180deg, #1a2230 0%, #121820 45%, #0e141c 100%);
+}
+
+.binder-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.35rem 0.15rem;
+  box-sizing: border-box;
+}
+
+.binder-book {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 10px 14px 14px 10px;
+  background: linear-gradient(180deg, #2a3344 0%, #1c2433 100%);
+  box-shadow:
+    0 0 0 2px #0a0e14,
+    0 18px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  transform-origin: left center;
+}
+
+.binder-book.flip-next {
+  animation: binder-flip-next 0.4s ease;
+}
+
+.binder-book.flip-prev {
+  animation: binder-flip-prev 0.4s ease;
+}
+
+@keyframes binder-flip-next {
+  0% { transform: perspective(900px) rotateY(0); }
+  45% { transform: perspective(900px) rotateY(-8deg) scale(0.985); opacity: 0.85; }
+  100% { transform: perspective(900px) rotateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes binder-flip-prev {
+  0% { transform: perspective(900px) rotateY(0); }
+  45% { transform: perspective(900px) rotateY(8deg) scale(0.985); opacity: 0.85; }
+  100% { transform: perspective(900px) rotateY(0) scale(1); opacity: 1; }
+}
+
+.binder-rings {
+  flex: 0 0 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0.5rem 0;
+  background: linear-gradient(90deg, #151b26 0%, #1e2636 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.binder-ring {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #d8dde8 0%, #8a93a5 45%, #4a5366 100%);
+  box-shadow:
+    inset 0 -1px 2px rgba(0, 0, 0, 0.35),
+    0 0 0 2px #0d121a;
+}
+
+.binder-page {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.4rem 0.55rem 0.5rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 30%),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 11px,
+      rgba(255, 255, 255, 0.015) 11px,
+      rgba(255, 255, 255, 0.015) 12px
+    ),
+    #232c3c;
+}
+
+.binder-page-label {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(230, 236, 248, 0.55);
+  flex: 0 0 auto;
+}
+
+.binder-page-label span {
+  color: rgba(230, 236, 248, 0.3);
+  font-weight: 500;
+}
+
+.binder-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--binder-cols, 3), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--binder-rows, 3), minmax(0, 1fr));
+  gap: 0.35rem;
+  align-content: stretch;
+}
+
+.binder-pocket {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  border-radius: 6px;
+  background: rgba(8, 12, 18, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.binder-pocket.is-drop-target {
+  background: rgba(120, 170, 220, 0.16);
+  box-shadow:
+    inset 0 0 0 1px rgba(160, 200, 255, 0.45),
+    0 0 18px rgba(100, 160, 220, 0.2);
+}
+
+.binder-pocket-sleeve {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0.2rem;
+  box-sizing: border-box;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  container-type: size;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 42%, rgba(255, 255, 255, 0.04) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Slot sempre no tamanho do card — vazio ou preenchido */
+.binder-card-slot {
+  --card-ratio: 2.5 / 3.5;
+  aspect-ratio: var(--card-ratio);
+  width: min(100cqw, calc(100cqh * 2.5 / 3.5));
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  flex-shrink: 0;
+}
+
+.binder-pocket-empty {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: rgba(10, 14, 20, 0.35);
+  color: rgba(200, 210, 230, 0.28);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-sizing: border-box;
+}
+
+/* —— Cover card (full-bleed art + overlay name/volume) —— */
+.manga-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+  cursor: grab;
+  background: transparent;
+  border-radius: 6px;
+  transition: transform 0.16s ease, filter 0.16s ease;
+  touch-action: none;
+}
+
+.manga-card:hover,
+.manga-card.is-examining {
+  transform: translateY(-2px) scale(1.015);
+  z-index: 2;
+  filter: brightness(1.06);
+}
+
+.manga-card:active,
+.manga-card.is-dragging {
+  cursor: grabbing;
+  opacity: 0.55;
+  transform: scale(0.97);
+}
+
+.manga-card-frame {
+  --card-frame-w: 8px;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  border-radius: 7px;
+  overflow: hidden;
+  padding: var(--card-frame-w);
+  /* Moldura prata metálica */
+  background:
+    linear-gradient(
+      145deg,
+      #f4f6f8 0%,
+      #c8ced6 18%,
+      #8a929c 38%,
+      #e2e6eb 52%,
+      #6a727c 72%,
+      #b4bbc4 88%,
+      #dfe3e8 100%
+    );
+  box-shadow:
+    0 0 0 1px rgba(30, 36, 48, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.manga-card-frame::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--card-frame-w) - 1px);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.manga-card.is-rare .manga-card-frame {
+  /* Moldura ouro metálica */
+  background:
+    linear-gradient(
+      145deg,
+      #fff6d0 0%,
+      #f0d060 16%,
+      #b8860b 34%,
+      #ffe08a 50%,
+      #8a6914 68%,
+      #e8c547 84%,
+      #fff1b0 100%
+    );
+  box-shadow:
+    0 0 0 1px rgba(70, 45, 0, 0.55),
+    inset 0 1px 0 rgba(255, 245, 200, 0.7),
+    inset 0 -1px 0 rgba(80, 50, 0, 0.35),
+    0 0 14px rgba(232, 197, 71, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.manga-card.is-rare .manga-card-frame::before {
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 0, 0.55),
+    inset 0 0 0 2px rgba(255, 230, 140, 0.25);
+}
+
+.manga-card-art {
+  position: absolute;
+  inset: var(--card-frame-w);
+  border-radius: 2px;
+  overflow: hidden;
+  background: #0e1218;
+}
+
+.manga-card-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+}
+
+.manga-card-cover-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0.5rem;
+  text-align: center;
+  color: rgba(255, 245, 220, 0.7);
+  font-size: 0.55rem;
+  font-weight: 700;
+  background: #141820;
+}
+
+.manga-card-overlay {
+  position: absolute;
+  inset: var(--card-frame-w);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  pointer-events: none;
+  z-index: 3;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.manga-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.35rem 0.4rem 0.75rem;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 10, 14, 0.88) 0%,
+    rgba(8, 10, 14, 0.55) 70%,
+    transparent 100%
+  );
+}
+
+.manga-card-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: clamp(0.48rem, 1vw, 0.68rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #f4f6fa;
+  text-align: left;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.manga-card-hp {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.12rem;
+  padding: 0.12rem 0.28rem;
+  border-radius: 3px;
+  background: rgba(12, 14, 18, 0.72);
+  backdrop-filter: blur(4px);
+  font-family: var(--font-brand);
+  font-size: clamp(0.62rem, 1.2vw, 0.85rem);
+  color: #f0f2f6;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.manga-card-hp small {
+  font-family: var(--font-ui);
+  font-size: 0.38rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: rgba(220, 225, 235, 0.75);
+}
+
+.binder-nav {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 2px solid rgba(200, 210, 230, 0.35);
+  background: linear-gradient(180deg, #2a3448 0%, #1a2230 100%);
+  color: #e8eef8;
+  font-size: 0.8rem;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+.binder-nav:hover:not(:disabled) {
+  transform: scale(1.06);
+  border-color: rgba(230, 200, 120, 0.65);
+}
+
+.binder-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.binder-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0 0.4rem;
+  z-index: 5;
+  flex: 0 0 auto;
+}
+
+.binder-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(200, 210, 230, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.binder-dot.is-active {
+  background: #e8c547;
+  border-color: #c4a030;
+  transform: scale(1.25);
+}
+
+@media (max-width: 900px) {
+  .binder-stage {
+    gap: 0.25rem;
+    padding: 0.45rem 0.25rem 0.2rem;
+  }
+
+  .binder-nav {
+    width: 2.1rem;
+    height: 2.1rem;
+    font-size: 0.75rem;
+  }
+
+  .binder-rings {
+    flex-basis: 18px;
+  }
+
+  .binder-ring {
+    width: 10px;
+    height: 10px;
+  }
+
+  .binder-grid {
+    gap: 0.4rem;
+  }
+
+  .binder-page {
+    padding: 0.5rem;
+  }
+}

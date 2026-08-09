@@ -1,0 +1,401 @@
+.estante3d-page {
+  --binder-ink: #e8eef8;
+  --binder-muted: #9aa8c0;
+  --binder-faint: #6e7c94;
+  --binder-panel: #161c28;
+  --binder-border: #2a3448;
+  --binder-accent: #e8c547;
+  --binder-accent-soft: rgba(232, 197, 71, 0.14);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) 1fr;
+  gap: 0;
+  width: 100%;
+  max-width: none;
+  height: calc(100dvh - 70px);
+  min-height: 0;
+  background: #0e141c;
+  overflow: hidden;
+  color: var(--binder-ink);
+}
+
+.estante3d-page.panel-collapsed {
+  grid-template-columns: 1fr;
+}
+
+.estante3d-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 1.15rem;
+  background: var(--binder-panel);
+  border-right: 1px solid var(--binder-border);
+  overflow-y: auto;
+  z-index: 2;
+}
+
+.estante3d-page.panel-collapsed .estante3d-panel {
+  display: none;
+}
+
+.estante3d-panel-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.estante3d-panel-header h1 {
+  font-family: var(--font-brand);
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin: 0;
+  color: var(--binder-accent);
+}
+
+.estante3d-panel-toggle {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--binder-border);
+  border-radius: 8px;
+  background: #1c2433;
+  color: var(--binder-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.estante3d-panel-toggle:hover {
+  border-color: var(--binder-accent);
+  color: var(--binder-accent);
+}
+
+.estante3d-open-panel {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 5;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(232, 197, 71, 0.45);
+  border-radius: 999px;
+  background: rgba(22, 28, 40, 0.92);
+  color: var(--binder-accent);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.estante3d-open-panel:hover {
+  background: #1c2433;
+}
+
+.estante3d-panel-header p {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--binder-muted);
+  line-height: 1.5;
+}
+
+.estante3d-card-count {
+  margin-top: 0.65rem !important;
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: var(--binder-accent-soft);
+  color: var(--binder-accent) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700;
+}
+
+.estante3d-credit {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--binder-border);
+  font-size: 0.78rem;
+  color: var(--binder-faint);
+  line-height: 1.45;
+}
+
+.estante3d-credit a {
+  color: var(--binder-accent);
+  font-weight: 600;
+}
+
+.estante3d-error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #f0a0a0;
+  background: rgba(160, 60, 60, 0.18);
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 80, 80, 0.35);
+}
+
+.estante3d-search label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--binder-muted);
+  margin-bottom: 0.4rem;
+}
+
+.estante3d-label-spaced {
+  margin-top: 0.85rem;
+}
+
+.estante3d-search > input,
+.estante3d-search-row input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--binder-border);
+  border-radius: 8px;
+  font-size: 0.92rem;
+  margin-bottom: 0;
+  background: #0e141c;
+  color: var(--binder-ink);
+}
+
+.estante3d-search > input:focus,
+.estante3d-search-row input:focus {
+  outline: none;
+  border-color: var(--binder-accent);
+  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.15);
+}
+
+.estante3d-status {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #d8e8ff;
+  background: rgba(100, 140, 200, 0.16);
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(120, 160, 220, 0.3);
+}
+
+.estante3d-vol-hint {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--binder-accent) !important;
+}
+
+.estante3d-cover-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+}
+
+.estante3d-cover-grid button {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.estante3d-cover-grid img {
+  width: 100% !important;
+  height: 120px !important;
+  object-fit: cover;
+}
+
+.estante3d-search-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.estante3d-search-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.estante3d-search-row button {
+  padding: 0.65rem 0.9rem;
+  background: linear-gradient(180deg, #f0d46a 0%, #d4b030 100%);
+  color: #1a140c;
+  border: 1px solid #b89620;
+  border-radius: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.estante3d-search-row button:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.estante3d-search-row button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.estante3d-results h2 {
+  font-size: 0.78rem;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--binder-faint);
+  font-weight: 600;
+}
+
+.estante3d-results ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.estante3d-results button {
+  display: flex;
+  gap: 0.65rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem;
+  border: 1px solid var(--binder-border);
+  border-radius: 8px;
+  background: #1c2433;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  color: inherit;
+}
+
+.estante3d-results button.is-selected {
+  border-color: var(--binder-accent);
+  background: rgba(232, 197, 71, 0.1);
+  box-shadow: 0 0 0 1px rgba(232, 197, 71, 0.25);
+}
+
+.estante3d-volume-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4.2rem, 1fr));
+  gap: 0.4rem;
+}
+
+.estante3d-volume-grid button {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 0.55rem 0.35rem;
+  border: 1px solid var(--binder-border);
+  border-radius: 8px;
+  background: #1c2433;
+  color: var(--binder-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.estante3d-volume-grid button:hover:not(:disabled) {
+  border-color: var(--binder-accent);
+  background: #222b3d;
+}
+
+.estante3d-volume-grid button.is-rare {
+  border-color: rgba(212, 160, 23, 0.65);
+  color: #e8c547;
+}
+
+.estante3d-volume-grid button.is-selected {
+  border-color: var(--binder-accent);
+  background: rgba(232, 197, 71, 0.14);
+  color: var(--binder-accent);
+}
+
+.estante3d-volume-grid button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.estante3d-results img {
+  width: 40px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: #0e141c;
+}
+
+.estante3d-results span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.estante3d-results strong {
+  font-size: 0.85rem;
+  color: var(--binder-ink);
+  line-height: 1.25;
+}
+
+.estante3d-results small {
+  font-size: 0.75rem;
+  color: var(--binder-faint);
+}
+
+.estante3d-viewport {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+
+.estante3d-viewport-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 0.45rem;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.75rem;
+  background: rgba(22, 28, 40, 0.88);
+  color: var(--binder-muted);
+  font-size: 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--binder-border);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 3;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 900px) {
+  .estante3d-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: calc(100dvh - 70px);
+  }
+
+  .estante3d-page.panel-collapsed {
+    grid-template-rows: 1fr;
+  }
+
+  .estante3d-panel {
+    max-height: 42vh;
+    border-right: none;
+    border-bottom: 1px solid var(--binder-border);
+  }
+
+  .estante3d-viewport {
+    height: 58vh;
+    min-height: 360px;
+  }
+
+  .estante3d-page.panel-collapsed .estante3d-viewport {
+    height: calc(100dvh - 70px);
+    min-height: 420px;
+  }
+
+  .estante3d-viewport-hint {
+    white-space: normal;
+    text-align: center;
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .estante3d-page {
+    height: auto;
+    min-height: calc(100dvh - 130px);
+  }
+}

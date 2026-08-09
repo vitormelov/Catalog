@@ -1,0 +1,599 @@
+.shelf2d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(255, 236, 200, 0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 80% 80%, rgba(160, 180, 200, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 15% 70%, rgba(170, 190, 165, 0.22) 0%, transparent 45%),
+    linear-gradient(180deg, #dfe6ee 0%, #c9d3de 42%, #b7c4b8 100%);
+}
+
+.shelf2d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, transparent 28%, transparent 72%, rgba(90, 110, 100, 0.12) 100%);
+  z-index: 0;
+}
+
+.shelf2d-carousel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  height: calc(100% - 2rem);
+  min-height: 0;
+  padding: 0.5rem 0.35rem 0;
+  box-sizing: border-box;
+}
+
+.shelf2d-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  perspective: 1400px;
+  perspective-origin: 50% 45%;
+  transform-style: preserve-3d;
+}
+
+.shelf2d-carousel-item {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.22, 1.1, 0.36, 1);
+  will-change: transform;
+}
+
+.shelf2d-carousel-item .shelf2d-shell {
+  height: 90%;
+  align-self: center;
+}
+
+.shelf2d-carousel-item.is-front {
+  z-index: 30;
+  pointer-events: auto;
+  transform: translateX(0) translateZ(0) rotateY(0deg) scale(1);
+  cursor: default;
+}
+
+.shelf2d-carousel-item.is-back {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.shelf2d-carousel-item.is-back .shelf2d-frame {
+  pointer-events: none;
+}
+
+/* Sem filter/opacity no item — isso achata o 3D das faces laterais */
+.shelf2d-carousel-item.offset--1 {
+  z-index: 20;
+  transform: translateX(-36%) translateZ(-160px) rotateY(38deg) scale(0.8);
+}
+
+.shelf2d-carousel-item.offset--2 {
+  z-index: 10;
+  transform: translateX(-56%) translateZ(-300px) rotateY(48deg) scale(0.62);
+}
+
+.shelf2d-carousel-item.offset-1 {
+  z-index: 20;
+  transform: translateX(36%) translateZ(-160px) rotateY(-38deg) scale(0.8);
+}
+
+.shelf2d-carousel-item.offset-2 {
+  z-index: 10;
+  transform: translateX(56%) translateZ(-300px) rotateY(-48deg) scale(0.62);
+}
+
+.shelf2d-carousel-item.is-back .shelf2d-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: rgba(70, 85, 100, 0.14);
+  transform: translateZ(1px);
+  pointer-events: none;
+}
+
+.shelf2d-carousel-item.is-back:hover .shelf2d-shell::after {
+  background: rgba(70, 85, 100, 0.04);
+}
+
+.shelf2d-unit-tag {
+  position: absolute;
+  top: 0.55rem;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 1.6rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(247, 241, 230, 0.9);
+  border: 1px solid rgba(184, 168, 142, 0.7);
+  color: #5a544c;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(70, 80, 95, 0.12);
+}
+
+.shelf2d-carousel-item.is-back .shelf2d-unit-tag {
+  opacity: 0.75;
+}
+
+.shelf2d-nav {
+  position: relative;
+  z-index: 40;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  border: 2px solid #b8a88e;
+  background: linear-gradient(180deg, #fffaf2 0%, #efe6d6 100%);
+  color: #5a544c;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(80, 90, 110, 0.16);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.shelf2d-nav:hover:not(:disabled) {
+  transform: scale(1.06);
+  border-color: #8fa0b5;
+  background: linear-gradient(180deg, #ffffff 0%, #e8eef4 100%);
+}
+
+.shelf2d-nav:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.shelf2d-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.shelf2d-dots {
+  position: absolute;
+  z-index: 40;
+  left: 50%;
+  bottom: 0.45rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.shelf2d-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  padding: 0;
+  border: 1px solid #b8a88e;
+  border-radius: 50%;
+  background: rgba(247, 241, 230, 0.65);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.shelf2d-dot.is-active {
+  background: #8fa0b5;
+  border-color: #6f8499;
+  transform: scale(1.25);
+}
+
+.shelf2d-dot:hover {
+  border-color: #8fa0b5;
+}
+
+.shelf2d-shell {
+  --slot-w: 32px;
+  --slot-gap: 2px;
+  --shelf-side: 14px;
+  --shelf-depth: 144px;
+  --wood-light: #e4c9a0;
+  --wood-mid: #c4a574;
+  --wood-dark: #9a784c;
+  --wood-deep: #6e5234;
+  --shelf-width: calc(
+    (var(--shelf-slots, 16) * var(--slot-w))
+    + ((var(--shelf-slots, 16) - 1) * var(--slot-gap))
+    + (var(--shelf-side) * 2)
+  );
+
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--shelf-width);
+  height: 100%;
+  min-height: 0;
+  transform-style: preserve-3d;
+}
+
+.shelf2d-face {
+  position: absolute;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.shelf2d-face-right {
+  top: 0;
+  left: 100%;
+  width: var(--shelf-depth);
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 230, 190, 0.06) 0 2px,
+      transparent 2px 7px
+    ),
+    linear-gradient(180deg, #c4a574 0%, #9a784c 28%, #7d5f3d 68%, #5a4228 100%);
+  border: 1px solid #6e5234;
+  box-shadow: inset 2px 0 8px rgba(255, 230, 190, 0.12);
+  transform: rotateY(90deg);
+  transform-origin: left center;
+}
+
+/* Espelho da face direita: ancora na borda esquerda, pivô na direita da face */
+.shelf2d-face-left {
+  top: 0;
+  left: calc(var(--shelf-depth) * -1);
+  width: var(--shelf-depth);
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 230, 190, 0.06) 0 2px,
+      transparent 2px 7px
+    ),
+    linear-gradient(180deg, #c4a574 0%, #9a784c 28%, #7d5f3d 68%, #5a4228 100%);
+  border: 1px solid #6e5234;
+  box-shadow: inset -2px 0 8px rgba(255, 230, 190, 0.12);
+  transform: rotateY(-90deg);
+  transform-origin: right center;
+}
+
+.shelf2d-face-top {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--shelf-depth);
+  background:
+    linear-gradient(90deg, #8a6a45 0%, #e4c9a0 22%, #d4b48a 55%, #b89568 82%, #7d5f3d 100%);
+  border: 1px solid #8a6a45;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 235, 0.35);
+  transform: rotateX(90deg);
+  transform-origin: top center;
+}
+
+.shelf2d-face-back {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, #8a6a45 0%, #6e5234 45%, #4a3620 100%);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.35);
+  transform: translateZ(calc(var(--shelf-depth) * -1));
+}
+
+.shelf2d-frame {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0 0 0.35rem;
+  border-radius: 4px 4px 6px 6px;
+  background:
+    linear-gradient(90deg, rgba(80, 55, 30, 0.22) 0%, transparent 10%, transparent 90%, rgba(80, 55, 30, 0.18) 100%),
+    linear-gradient(180deg, #d8bc94 0%, var(--wood-mid) 22%, #b08d5e 62%, var(--wood-dark) 100%);
+  border: 1px solid #8a6a45;
+  transform: translateZ(0);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 245, 220, 0.45),
+    inset 0 -3px 8px rgba(60, 40, 20, 0.16),
+    inset 4px 0 12px rgba(60, 40, 20, 0.1),
+    inset -4px 0 12px rgba(60, 40, 20, 0.08),
+    0 1px 0 rgba(255, 245, 220, 0.25),
+    6px 10px 14px rgba(90, 70, 45, 0.22),
+    14px 22px 28px rgba(60, 50, 40, 0.18),
+    22px 36px 48px rgba(40, 45, 55, 0.2),
+    8px 48px 64px rgba(50, 60, 80, 0.16);
+}
+
+.shelf2d-cast-shadow {
+  position: absolute;
+  left: 4%;
+  right: 0;
+  bottom: -22px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(40, 45, 55, 0.28) 0%,
+    rgba(40, 45, 55, 0.12) 40%,
+    transparent 74%
+  );
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: -1;
+  transform: translateZ(-1px);
+}
+
+.shelf2d-top-molding {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 16px;
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background:
+    linear-gradient(90deg, rgba(80, 55, 30, 0.2) 0%, transparent 12%, transparent 88%, rgba(80, 55, 30, 0.18) 100%),
+    linear-gradient(180deg, #ecd4ac 0%, #d4b48a 40%, #b89568 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 250, 235, 0.5),
+    inset 0 -2px 4px rgba(80, 55, 30, 0.18),
+    0 3px 5px rgba(90, 68, 42, 0.28),
+    0 6px 12px rgba(60, 40, 20, 0.14);
+}
+
+.shelf2d-bay {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+}
+
+.shelf2d-row {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  gap: var(--slot-gap);
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background:
+    linear-gradient(90deg, rgba(40, 30, 20, 0.35) 0%, transparent 8%, transparent 92%, rgba(40, 30, 20, 0.28) 100%),
+    linear-gradient(180deg, rgba(35, 40, 50, 0.45) 0%, rgba(70, 80, 90, 0.18) 40%, rgba(120, 110, 90, 0.1) 100%);
+  border-left: var(--shelf-side) solid #a8845a;
+  border-right: var(--shelf-side) solid #8a6a45;
+  box-shadow:
+    inset 0 18px 28px rgba(25, 30, 40, 0.28),
+    inset 0 6px 18px rgba(25, 30, 40, 0.18),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.1),
+    inset 10px 0 22px rgba(20, 15, 10, 0.16),
+    inset -8px 0 20px rgba(20, 15, 10, 0.12);
+}
+
+.shelf2d-plank {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 13px;
+  width: 100%;
+  background:
+    linear-gradient(90deg, rgba(80, 55, 30, 0.25) 0%, transparent 10%, transparent 90%, rgba(80, 55, 30, 0.2) 100%),
+    linear-gradient(180deg, #e0c49a 0%, #c4a574 45%, #9a784c 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 245, 220, 0.4),
+    inset 0 -1px 0 rgba(60, 40, 20, 0.25),
+    0 3px 4px rgba(80, 55, 35, 0.28),
+    0 6px 12px rgba(40, 30, 20, 0.16);
+}
+
+.shelf2d-base {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 18px;
+  width: 100%;
+  border-radius: 0 0 4px 4px;
+  background:
+    linear-gradient(90deg, rgba(80, 55, 30, 0.3) 0%, transparent 12%, transparent 88%, rgba(80, 55, 30, 0.25) 100%),
+    linear-gradient(180deg, #c4a574 0%, #9a784c 55%, #7d5f3d 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 245, 220, 0.28),
+    inset 0 -2px 6px rgba(40, 30, 20, 0.28),
+    0 4px 6px rgba(80, 55, 35, 0.28),
+    0 10px 18px rgba(40, 30, 20, 0.18);
+}
+
+.shelf2d-slot {
+  flex: 0 0 var(--slot-w);
+  width: var(--slot-w);
+  max-width: var(--slot-w);
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.shelf2d-slot.is-empty {
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.shelf2d-slot.is-empty:hover,
+.shelf2d-slot.is-drop-target {
+  background: rgba(200, 220, 235, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(143, 160, 181, 0.55);
+}
+
+.shelf2d-spine {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+  cursor: grab;
+  border-radius: 1px 1px 0 0;
+  box-sizing: border-box;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.14) 100%
+    ),
+    linear-gradient(180deg, color-mix(in srgb, var(--spine-color) 82%, #fff) 0%, var(--spine-color) 100%);
+  box-shadow:
+    1px 0 0 rgba(255, 255, 255, 0.18),
+    -1px 0 0 rgba(0, 0, 0, 0.22),
+    1px 0 4px rgba(70, 80, 95, 0.18);
+  overflow: hidden;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+  touch-action: none;
+}
+
+.shelf2d-spine:hover,
+.shelf2d-spine.is-examining {
+  transform: translateY(-4px);
+  z-index: 2;
+  box-shadow:
+    1px 0 0 rgba(255, 255, 255, 0.22),
+    -1px 0 0 rgba(0, 0, 0, 0.25),
+    3px 8px 16px rgba(90, 100, 120, 0.28);
+  filter: brightness(1.06);
+}
+
+.shelf2d-spine:active,
+.shelf2d-spine.is-dragging {
+  cursor: grabbing;
+  opacity: 0.55;
+  transform: translateY(-1px) scale(0.98);
+}
+
+.shelf2d-spine-edge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.08));
+}
+
+.shelf2d-spine-cover {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.shelf2d-spine-label {
+  position: absolute;
+  inset: 6px 3px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: rgba(255, 250, 240, 0.94);
+  text-shadow: 0 1px 2px rgba(40, 45, 55, 0.55);
+  pointer-events: none;
+}
+
+.shelf2d-spine-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  text-overflow: ellipsis;
+}
+
+.shelf2d-spine-title.is-long {
+  font-size: 0.52rem;
+  letter-spacing: 0.02em;
+}
+
+.shelf2d-spine-title.is-xlong {
+  font-size: 0.44rem;
+  letter-spacing: 0.01em;
+}
+
+.shelf2d-spine-vol {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-ui);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .shelf2d-carousel {
+    gap: 0.15rem;
+    padding: 0.35rem 0.15rem 0;
+  }
+
+  .shelf2d-nav {
+    width: 2.15rem;
+    height: 2.15rem;
+    font-size: 0.8rem;
+  }
+
+  .shelf2d-carousel-item.offset--1 {
+    transform: translateX(-32%) translateZ(-130px) rotateY(34deg) scale(0.74);
+  }
+
+  .shelf2d-carousel-item.offset--2 {
+    transform: translateX(-50%) translateZ(-250px) rotateY(44deg) scale(0.56);
+  }
+
+  .shelf2d-carousel-item.offset-1 {
+    transform: translateX(32%) translateZ(-130px) rotateY(-34deg) scale(0.74);
+  }
+
+  .shelf2d-carousel-item.offset-2 {
+    transform: translateX(50%) translateZ(-250px) rotateY(-44deg) scale(0.56);
+  }
+
+  .shelf2d-shell {
+    --slot-w: 28px;
+    --shelf-depth: 120px;
+  }
+}

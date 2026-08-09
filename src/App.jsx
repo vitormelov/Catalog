@@ -13,6 +13,7 @@ import MyAnimes from './pages/MyAnimes';
 import MangaDetail from './pages/MangaDetail';
 import AnimeDetail from './pages/AnimeDetail';
 import Ranking from './pages/Ranking';
+import Estante3D from './pages/Estante3D';
 import './App.css';
 
 function App() {
@@ -69,6 +70,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Ranking />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/estante-3d"
+              element={
+                <ProtectedRoute>
+                  <Estante3D />
                 </ProtectedRoute>
               }
             />
