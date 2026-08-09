@@ -1,0 +1,98 @@
+.friend-media-detail {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.friend-media-detail .friend-back-link {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.friend-media-detail .friend-back-link:hover {
+  color: var(--color-accent-dark);
+}
+
+.friend-media-owner {
+  margin: 0 0 1rem;
+  color: var(--color-text-faint);
+  font-size: 0.95rem;
+}
+
+.friend-ratings-readonly .rating-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-warning);
+}
+
+.friend-volume-grid .friend-volume-cell,
+.friend-episode-grid .friend-episode-cell {
+  cursor: default;
+  pointer-events: none;
+}
+
+.friend-volume-grid .friend-volume-cell:hover,
+.friend-episode-grid .friend-episode-cell:hover {
+  transform: none;
+}
+
+.volume-cell-mark {
+  font-size: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.friend-volume-cell.owned .volume-cell-mark {
+  color: var(--color-gold);
+}
+
+.friend-tracking-readonly h2 {
+  margin: 0 0 1rem;
+}
+
+.friend-tracking-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.friend-tracking-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.friend-tracking-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.friend-media-meta {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.manga-library-item.clickable,
+.anime-library-item.clickable {
+  cursor: pointer;
+}
+
+.manga-library-item.clickable:hover,
+.anime-library-item.clickable:hover {
+  background: var(--color-accent-soft);
+}
+
+.friend-library-list .owned-volume-row {
+  grid-template-columns: 70px 1fr 90px 130px 130px;
+}
+
+@media (max-width: 768px) {
+  .friend-tracking-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

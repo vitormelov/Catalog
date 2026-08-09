@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   addDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
   getDocs,
@@ -10,9 +11,12 @@ import {
   query,
   where,
   orderBy,
-  Timestamp
+  limit,
+  Timestamp,
+  runTransaction,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { buildFriendshipId } from '../utils/friendHelpers';
 
 // ========== COLECÕES ==========
 
@@ -502,6 +506,243 @@ export const deleteAnimeFromCollection = async (animeId, userId) => {
     await deleteDoc(docRef);
   } catch (error) {
     console.error('Erro ao deletar anime:', error);
+    throw error;
+  }
+};
+
+// ========== USUÁRIOS ==========
+
+const normalizeUserName = (name) => name.trim().replace(/\s+/g, ' ');
+
+const createNameTakenError = () => {
+  const error = new Error('Este nome já está em uso');
+  error.code = 'NAME_TAKEN';
+  return error;
+};
+
+/**
+ * Verifica se o nome já está em uso (case-insensitive).
+ */
+export const isUserNameTaken = async (name) => {
+  try {
+    const nameLowercase = normalizeUserName(name).toLowerCase();
+    const docSnap = await getDoc(doc(db, 'usernames', nameLowercase));
+    return docSnap.exists();
+  } catch (error) {
+    console.error('Erro ao verificar nome:', error);
+    throw error;
+  }
+};
+
+/**
+ * Cria o perfil público do usuário (nome pesquisável por amigos).
+ */
+export const createUserProfile = async (userId, { name, email }) => {
+  try {
+    const trimmedName = normalizeUserName(name);
+    const nameLowercase = trimmedName.toLowerCase();
+    const profileRef = doc(db, 'users', userId);
+    const usernameRef = doc(db, 'usernames', nameLowercase);
+
+    await runTransaction(db, async (transaction) => {
+      const usernameSnap = await transaction.get(usernameRef);
+      if (usernameSnap.exists()) {
+        throw createNameTakenError();
+      }
+
+      const now = Timestamp.now();
+      transaction.set(usernameRef, { userId, createdAt: now });
+      transaction.set(profileRef, {
+        userId,
+        name: trimmedName,
+        nameLowercase,
+        email,
+        showCostsToFriends: true,
+        createdAt: now,
+        updatedAt: now,
+      });
+    });
+
+    return profileRef.id;
+  } catch (error) {
+    if (error.code !== 'NAME_TAKEN') {
+      console.error('Erro ao criar perfil do usuário:', error);
+    }
+    throw error;
+  }
+};
+
+/**
+ * Busca o perfil de um usuário pelo ID.
+ */
+export const getUserProfile = async (userId) => {
+  try {
+    const docRef = doc(db, 'users', userId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return null;
+    return { id: docSnap.id, ...docSnap.data() };
+  } catch (error) {
+    console.error('Erro ao buscar perfil do usuário:', error);
+    throw error;
+  }
+};
+
+/**
+ * Atualiza preferências de privacidade do perfil.
+ */
+export const updateUserPrivacySettings = async (userId, settings) => {
+  try {
+    const profileRef = doc(db, 'users', userId);
+    await updateDoc(profileRef, {
+      ...settings,
+      updatedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error('Erro ao atualizar preferências de privacidade:', error);
+    throw error;
+  }
+};
+
+/**
+ * Busca usuários pelo nome (prefixo, case-insensitive).
+ */
+export const searchUsersByName = async (searchTerm, maxResults = 20) => {
+  try {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return [];
+
+    const q = query(
+      collection(db, 'users'),
+      where('nameLowercase', '>=', term),
+      where('nameLowercase', '<=', `${term}\uf8ff`),
+      limit(maxResults)
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data(),
+    }));
+  } catch (error) {
+    console.error('Erro ao buscar usuários por nome:', error);
+    throw error;
+  }
+};
+
+export const getFriendship = async (userIdA, userIdB) => {
+  try {
+    const docRef = doc(db, 'friendships', buildFriendshipId(userIdA, userIdB));
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return null;
+    return { id: docSnap.id, ...docSnap.data() };
+  } catch (error) {
+    console.error('Erro ao buscar amizade:', error);
+    throw error;
+  }
+};
+
+export const areFriends = async (userIdA, userIdB) => {
+  const friendship = await getFriendship(userIdA, userIdB);
+  return friendship?.status === 'accepted';
+};
+
+export const getUserFriendships = async (userId) => {
+  try {
+    const q = query(
+      collection(db, 'friendships'),
+      where('participants', 'array-contains', userId)
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data(),
+    }));
+  } catch (error) {
+    console.error('Erro ao buscar amizades:', error);
+    throw error;
+  }
+};
+
+export const sendFriendRequest = async (requesterId, addresseeId) => {
+  if (requesterId === addresseeId) {
+    const error = new Error('Você não pode adicionar a si mesmo.');
+    error.code = 'SELF_FRIEND';
+    throw error;
+  }
+
+  try {
+    const friendshipId = buildFriendshipId(requesterId, addresseeId);
+    const friendshipRef = doc(db, 'friendships', friendshipId);
+    const existing = await getDoc(friendshipRef);
+
+    if (existing.exists()) {
+      const data = existing.data();
+      if (data.status === 'accepted') {
+        const error = new Error('Vocês já são amigos.');
+        error.code = 'ALREADY_FRIENDS';
+        throw error;
+      }
+      const error = new Error('Já existe um pedido de amizade entre vocês.');
+      error.code = 'REQUEST_EXISTS';
+      throw error;
+    }
+
+    const now = Timestamp.now();
+    await setDoc(friendshipRef, {
+      participants: [requesterId, addresseeId].sort(),
+      requesterId,
+      addresseeId,
+      status: 'pending',
+      createdAt: now,
+      updatedAt: now,
+    });
+    return friendshipId;
+  } catch (error) {
+    if (!['SELF_FRIEND', 'ALREADY_FRIENDS', 'REQUEST_EXISTS'].includes(error.code)) {
+      console.error('Erro ao enviar pedido de amizade:', error);
+    }
+    throw error;
+  }
+};
+
+export const acceptFriendRequest = async (currentUserId, requesterId) => {
+  try {
+    const friendshipRef = doc(
+      db,
+      'friendships',
+      buildFriendshipId(currentUserId, requesterId)
+    );
+    const docSnap = await getDoc(friendshipRef);
+
+    if (!docSnap.exists() || docSnap.data().status !== 'pending') {
+      const error = new Error('Pedido de amizade não encontrado.');
+      error.code = 'REQUEST_NOT_FOUND';
+      throw error;
+    }
+
+    if (docSnap.data().addresseeId !== currentUserId) {
+      const error = new Error('Você não pode aceitar este pedido.');
+      error.code = 'FORBIDDEN';
+      throw error;
+    }
+
+    await updateDoc(friendshipRef, {
+      status: 'accepted',
+      updatedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    if (!['REQUEST_NOT_FOUND', 'FORBIDDEN'].includes(error.code)) {
+      console.error('Erro ao aceitar pedido de amizade:', error);
+    }
+    throw error;
+  }
+};
+
+export const removeFriendship = async (userIdA, userIdB) => {
+  try {
+    const friendshipRef = doc(db, 'friendships', buildFriendshipId(userIdA, userIdB));
+    await deleteDoc(friendshipRef);
+  } catch (error) {
+    console.error('Erro ao remover amizade:', error);
     throw error;
   }
 };

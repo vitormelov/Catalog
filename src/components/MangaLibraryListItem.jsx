@@ -9,7 +9,14 @@ import {
 import { IconEye, IconTrash } from './Icons';
 import './MangaLibraryListItem.css';
 
-const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => {
+const MangaLibraryListItem = ({
+  manga,
+  onView,
+  onDelete,
+  onRowClick,
+  deleting = false,
+  hideCost = false,
+}) => {
   const imageUrl = manga.imageUrl || '/placeholder-manga.jpg';
   const title = manga.title || '';
   const titleEnglish = manga.titleEnglish || '';
@@ -20,7 +27,22 @@ const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => 
   const statusLabel = getMangaCollectionStatusLabel(manga);
 
   return (
-    <div className="manga-library-item">
+    <div
+      className={`manga-library-item ${onRowClick ? 'clickable' : ''}`}
+      onClick={onRowClick || undefined}
+      onKeyDown={
+        onRowClick
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onRowClick();
+              }
+            }
+          : undefined
+      }
+      role={onRowClick ? 'button' : undefined}
+      tabIndex={onRowClick ? 0 : undefined}
+    >
       <div className="manga-library-image">
         <img src={imageUrl} alt={title} />
       </div>
@@ -55,33 +77,41 @@ const MangaLibraryListItem = ({ manga, onView, onDelete, deleting = false }) => 
         </div>
         <span className="ratings-legend">minha · público</span>
       </div>
-      <div className="manga-library-cost">
-        <span className="manga-library-mobile-label">Custo</span>
-        <span className="cost-value">R$ {cost.toFixed(2)}</span>
-      </div>
-      <div className="manga-library-actions">
-        {onView && (
-          <button
-            type="button"
-            className="library-btn library-btn-view"
-            onClick={onView}
-            title="Ver detalhes"
-          >
-            <IconEye />
-          </button>
-        )}
-        {onDelete && (
-          <button
-            type="button"
-            className="library-btn library-btn-delete"
-            onClick={onDelete}
-            disabled={deleting}
-            title="Remover da coleção"
-          >
-            <IconTrash />
-          </button>
-        )}
-      </div>
+      {!hideCost && (
+        <div className="manga-library-cost">
+          <span className="manga-library-mobile-label">Custo</span>
+          <span className="cost-value">R$ {cost.toFixed(2)}</span>
+        </div>
+      )}
+      {(onView || onDelete) && (
+        <div
+          className="manga-library-actions"
+          onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => event.stopPropagation()}
+        >
+          {onView && (
+            <button
+              type="button"
+              className="library-btn library-btn-view"
+              onClick={onView}
+              title="Ver detalhes"
+            >
+              <IconEye />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              type="button"
+              className="library-btn library-btn-delete"
+              onClick={onDelete}
+              disabled={deleting}
+              title="Remover da coleção"
+            >
+              <IconTrash />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

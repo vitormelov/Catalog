@@ -14,6 +14,11 @@ import MangaDetail from './pages/MangaDetail';
 import AnimeDetail from './pages/AnimeDetail';
 import Ranking from './pages/Ranking';
 import Estante3D from './pages/Estante3D';
+import Account from './pages/Account';
+import Friends from './pages/Friends';
+import FriendProfile from './pages/FriendProfile';
+import FriendMangaDetail from './pages/FriendMangaDetail';
+import FriendAnimeDetail from './pages/FriendAnimeDetail';
 import './App.css';
 
 function App() {
@@ -78,6 +83,46 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Estante3D />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <Account />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/friends"
+              element={
+                <ProtectedRoute>
+                  <Friends />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/friends/:userId"
+              element={
+                <ProtectedRoute>
+                  <FriendProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/friends/:userId/mangas/:mangaId"
+              element={
+                <ProtectedRoute>
+                  <FriendMangaDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/friends/:userId/animes/:animeId"
+              element={
+                <ProtectedRoute>
+                  <FriendAnimeDetail />
                 </ProtectedRoute>
               }
             />

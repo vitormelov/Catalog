@@ -1,23 +1,13 @@
 // Layout principal da aplicação
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LogoMark from './LogoMark';
+import UserMenu from './UserMenu';
 import './Layout.css';
 
 const Layout = ({ children }) => {
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const location = useLocation();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-    }
-  };
-
   const isLandingPage = !currentUser;
   const isFullBleed = location.pathname === '/estante-3d';
 
@@ -36,10 +26,7 @@ const Layout = ({ children }) => {
               <Link to="/my-animes">Meus Animes</Link>
               <Link to="/ranking">Ranking</Link>
               <Link to="/estante-3d">Binder</Link>
-              <span className="user-email">{currentUser.email}</span>
-              <button onClick={handleLogout} className="logout-btn">
-                Sair
-              </button>
+              <UserMenu />
             </nav>
           </div>
         </header>
@@ -60,4 +47,3 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
-

@@ -164,13 +164,8 @@ const MyMangas = () => {
               />
             ))}
             <div className="manga-library-total-row">
-              <span></span>
               <span className="total-label">Custo total da coleção</span>
-              <span></span>
-              <span></span>
-              <span></span>
               <span className="total-cost">R$ {stats.totalCost.toFixed(2)}</span>
-              <span></span>
             </div>
           </div>
         </>
